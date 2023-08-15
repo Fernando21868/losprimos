@@ -9,10 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResponseSuccessDto<T> extends ResponseDto {
 
-    private T responseData;
-
-    public ResponseSuccessDto(int statusCode, String message, T responseData) {
-        super(statusCode, message);
-        this.responseData = responseData;
+    public ResponseSuccessDto(Object data, int statusCode, String message, Boolean error) {
+        super(data, statusCode, message, error);
     }
 }

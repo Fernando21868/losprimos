@@ -1,17 +1,14 @@
 package com.example.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
@@ -29,6 +26,7 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany
-    private List<Role> roles;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Role> roles = new ArrayList<>();
+
 }

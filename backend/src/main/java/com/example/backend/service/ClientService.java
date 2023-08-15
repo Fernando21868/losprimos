@@ -6,9 +6,12 @@ import com.example.backend.dto.request.ClientDtoRequest;
 import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.ClientNotFoundException;
 import com.example.backend.model.Client;
+import com.example.backend.model.Role;
+import com.example.backend.model.RoleEnum;
 import com.example.backend.repository.IClientRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,9 +46,14 @@ public class ClientService implements IClientService{
     @Override
     public ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientCreateDtoRequest) {
         Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
+        Role role = new Role();
+        role.setRol(RoleEnum.CLIENT);
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        client.setRoles(roles);
         Client clientPersist = clientRepository.save(client);
         ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientPersist, ClientDtoResponse.class);
-        return new ResponseSuccessDto<>(201, "El cliente fue creado con exito", clientDtoResponse);
+        return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class ClientService implements IClientService{
             mapper.modelMapper().map(clientCreateDtoRequest, clientExisting);
             Client clientUpdated = clientRepository.save(clientExisting);
             ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientUpdated, ClientDtoResponse.class);
-            return new ResponseSuccessDto<>(200, "El cliente fue actulizado con exito", clientDtoResponse);
+            return new ResponseSuccessDto<>(clientDtoResponse, 200, "El cliente fue actulizado con exito", false);
         }
         throw  new ClientNotFoundException("No se encontro el cliente para ser actualizado");
     }
@@ -67,7 +75,7 @@ public class ClientService implements IClientService{
         if(client.isPresent()){
             clientRepository.deleteById(id);
             ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(client.get(), ClientDtoResponse.class);
-            return new ResponseSuccessDto<>(204, "El cliente fue eliminado con exito", clientDtoResponse);
+            return new ResponseSuccessDto<>(clientDtoResponse, 204, "El cliente fue eliminado con exito", false);
         }
         throw  new ClientNotFoundException("No se encontro el cliente para ser eliminado");
 

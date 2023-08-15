@@ -24,12 +24,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                //.antMatchers(
-                //        "/api/v1/employees",
-                //        "/api/v1/clients"
-                //).hasAnyAuthority("ADMIN")
-                //.antMatchers(            "/api/v1/clients")
-                //.hasAnyAuthority("EMPLOYEE")
+                .antMatchers(
+                        "/api/v1/employees/**",
+                        "/api/v1/clients/**"
+                ).hasAnyAuthority("ADMIN")//
+                .antMatchers(
+                        "/api/v1/clients/**"
+                ).hasAnyAuthority("EMPLOYEE", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/sign-in")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/ping")

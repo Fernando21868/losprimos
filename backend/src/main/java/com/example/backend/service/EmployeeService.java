@@ -7,10 +7,12 @@ import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.EmployeeNotFoundException;
 import com.example.backend.model.Employee;
 import com.example.backend.model.Role;
+import com.example.backend.model.RoleEnum;
 import com.example.backend.repository.IEmployeeRepository;
 import com.example.backend.repository.IRoleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +25,6 @@ public class EmployeeService implements IEmployeeService{
     private final ModelMapperConfig mapper;
 
     private final IRoleRepository roleRepository;
-
 
     public EmployeeService(IEmployeeRepository employeeRepository, ModelMapperConfig modelMapperConfig, IRoleRepository roleRepository){
         this.employeeRepository = employeeRepository;
@@ -48,16 +49,23 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public ResponseSuccessDto<EmployeeDtoResponse> createEmployee(EmployeeDtoRequest employeeDtoRequest) {
         Employee employee = mapper.modelMapper().map(employeeDtoRequest, Employee.class);
-
-        // Guardar los roles primero y actualizar las referencias en el empleado
-        List<Role> persistedRoles = employee.getRoles().stream()
-                .map(role -> roleRepository.save(role))
-                .collect(Collectors.toList());
-        employee.setRoles(persistedRoles); // Actualizar la lista de roles en el objeto Employee
-
+        if(employee.getRoles()!=null) {
+            // Guardar los roles primero y actualizar las referencias en el empleado
+            List<Role> persistedRoles = employee.getRoles().stream()
+                    .map(role -> roleRepository.save(role))
+                    .collect(Collectors.toList());
+            employee.setRoles(persistedRoles); // Actualizar la lista de roles en el objeto Employee
+        } else {
+            Role role = new Role();
+            role.setRol(RoleEnum.EMPLOYEE);
+            List<Role> persistedRoles = new ArrayList<>();
+            persistedRoles.add(role);
+            roleRepository.save(persistedRoles.get(0));
+            employee.setRoles(persistedRoles);
+        }
         Employee employeePersist = employeeRepository.save(employee);
         EmployeeDtoResponse employeeDtoResponse = mapper.modelMapper().map(employeePersist, EmployeeDtoResponse.class);
-        return new ResponseSuccessDto<>(201, "El empleado se creó con éxito", employeeDtoResponse);
+        return new ResponseSuccessDto<>(employeeDtoResponse, 201, "El empleado se creó con éxito", false);
     }
 
     @Override
@@ -68,7 +76,7 @@ public class EmployeeService implements IEmployeeService{
             mapper.modelMapper().map(employeeDtoRequest, existingEmployee);
             Employee updatedEmployee = employeeRepository.save(existingEmployee);
             EmployeeDtoResponse employeeDtoResponse = mapper.modelMapper().map(updatedEmployee, EmployeeDtoResponse.class);
-            return new ResponseSuccessDto<>(200, "El empleado fue actualizado con exito", employeeDtoResponse);
+            return new ResponseSuccessDto<>(employeeDtoResponse, 200, "El empleado fue actualizado con exito", false);
         }
         throw new EmployeeNotFoundException("No se encontro el empleado para actualizar");
     }
@@ -79,7 +87,7 @@ public class EmployeeService implements IEmployeeService{
         if(employee.isPresent()){
             EmployeeDtoResponse employeeDtoResponse = mapper.modelMapper().map(employee.get(), EmployeeDtoResponse.class);
             employeeRepository.deleteById(id);
-            return new ResponseSuccessDto<>(204, "El empleado se elimino con exito", employeeDtoResponse);
+            return new ResponseSuccessDto<>(null, 204, "El empleado se elimino con exito", false);
         }
         throw new EmployeeNotFoundException("No se encontro el empleado para eliminar");
     }

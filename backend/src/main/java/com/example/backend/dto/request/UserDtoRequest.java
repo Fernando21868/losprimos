@@ -1,7 +1,8 @@
 package com.example.backend.dto.request;
 
+import com.example.backend.annotation.PasswordValueMatch;
+import com.example.backend.annotation.ValidPassword;
 import com.example.backend.model.Role;
-import com.example.backend.model.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
+@PasswordValueMatch.List({@PasswordValueMatch(field = "password", fieldMatch = "confirmPassword", message = "Las contraseñas no coinciden")})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,18 +22,28 @@ public class UserDtoRequest {
     private String email;
 
     @NotBlank(message = "Por favor introduzca nombre")
-    @Size(max = 30, message = "El nombre debe contener por lo menos 30 caracteres")
+    @Size(max = 30, message = "El nombre no debe contener mas de 30 caracteres")
     private String firstName;
 
     @NotBlank(message = "Por favor introduzca apellido ")
-    @Size(max = 30, message = "El apellido debe contener por lo menos 30 caracteres")
+    @Size(max = 30, message = "El apellido no debe contener mas de 30 caracteres")
     private String lastName;
 
     @NotBlank(message = "Por favor introduzca nombre de usuario")
-    @Size(max = 30, message = "El username debe contener por lo menos 30 caracteres")
+    @Size(max = 30, message = "El nombre de usuario no debe contener mas de 30 caracteres")
     private String username;
 
-    @Size(max = 30, message = "El telefono debe contener por lo menos 30 caracteres")
+    @NotBlank(message = "Por favor introduzca una contraseña")
+    @Size(max = 30, message = "La contraseña no debe contener mas de 30 caracteres")
+    @ValidPassword
+    private String password;
+
+    @NotBlank(message = "Por favor introduzca una contraseña")
+    @Size(max = 30, message = "La contraseña no debe contener mas de 30 caracteres")
+    @ValidPassword
+    private String confirmPassword;
+
+    @Size(max = 30, message = "El telefono no debe contener mas de 30 caracteres")
     private String phoneNumber;
 
     @PastOrPresent(message = "La fecha de nacimiento debe ser anterior a la actual")
@@ -40,6 +52,7 @@ public class UserDtoRequest {
     @Size(max = 100, message = "La direccion debe contener por lo menos 30 caracteres")
     private String address;
 
-    private List<RoleEnum> roles;
+    @Size(min = 1, max = 3)
+    private List<Role> roles;
 
 }
