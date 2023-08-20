@@ -12,4 +12,6 @@ public interface IClientService {
     ResponseSuccessDto createClient(ClientDtoRequest clientCreateDtoRequest);
     ResponseSuccessDto updateClient(Long id, ClientDtoRequest clientCreateDtoRequest);
     ResponseSuccessDto deleteClient(Long id);
+    ResponseSuccessDto registerClient(ClientDtoRequest clientCreateDtoRequest);
+
 }

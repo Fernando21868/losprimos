@@ -91,6 +91,26 @@ public class ClientService implements IClientService{
 
     }
 
+    @Override
+    public ResponseSuccessDto<ClientDtoResponse> registerClient(ClientDtoRequest clientCreateDtoRequest) {
+        if(emailExists(clientCreateDtoRequest.getEmail())){
+            throw new UserAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+        }
+        if(usernameExists(clientCreateDtoRequest.getUsername())){
+            throw new UserAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
+        }
+        Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
+        Role role = new Role();
+        role.setRol(RoleEnum.CLIENT);
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        client.setRoles(roles);
+        client.setPassword(passwordEncoderConfig.passwordEncoder().encode(client.getPassword()));
+        Client clientPersist = clientRepository.save(client);
+        ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientPersist, ClientDtoResponse.class);
+        return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
+    }
+
     private boolean emailExists(String email){
         return clientRepository.findByEmail(email) != null;
     }

@@ -18,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDtoRequest {
 
-    @ValidEmail(message = "Por favor introduzca un email valido")
+    //@ValidEmail(message = "Por favor introduzca un email valido")
+    @Email(message = "Por favor introduzca un email valido")
     @NotNull(message = "Por favor introduzca un email")
     @NotBlank(message = "Por favor introduzca un email")
     private String email;
@@ -37,12 +38,12 @@ public class UserDtoRequest {
 
     @NotBlank(message = "Por favor introduzca una contraseña")
     @Size(max = 30, message = "La contraseña no debe contener mas de 30 caracteres")
-    @ValidPassword
+    //@ValidPassword
     private String password;
 
     @NotBlank(message = "Por favor introduzca una contraseña")
     @Size(max = 30, message = "La contraseña no debe contener mas de 30 caracteres")
-    @ValidPassword
+    //@ValidPassword
     private String confirmPassword;
 
     @Size(max = 30, message = "El telefono no debe contener mas de 30 caracteres")

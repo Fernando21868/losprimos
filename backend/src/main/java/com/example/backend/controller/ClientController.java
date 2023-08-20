@@ -43,4 +43,10 @@ public class ClientController {
     public ResponseEntity<?> deleteClient(@PathVariable Long id){
         return new ResponseEntity<>(clientService.deleteClient(id), HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDtoRequest clientDtoRequest){
+        return new ResponseEntity<>(clientService.registerClient(clientDtoRequest), HttpStatus.OK);
+    }
 }

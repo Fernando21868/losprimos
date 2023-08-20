@@ -1,5 +1,5 @@
 "use client";
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,16 +14,24 @@ import {
   FormMessage,
 } from "../../@components/ui/form";
 import { Input } from "../../@components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { StateAuthSlice } from "../../types/interfaces";
 import { RootState } from "../../store/store";
+import { registerUser } from "../../data/authActions";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { useEffect } from "react";
 
 function Register() {
   const { loading, userInfo, error, success }: StateAuthSlice = useSelector(
     (state: RootState) => state["auth"]
   );
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (success) navigate('/login')
+  }, [navigate, userInfo, success])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +48,12 @@ function Register() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+    const response = await dispatch(registerUser(values));
+    console.log(response);
+    
+  }
 
   return (
     <div className="p-4 flex flex-col items-center justify-center">

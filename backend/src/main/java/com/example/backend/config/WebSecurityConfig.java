@@ -20,10 +20,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure ( HttpSecurity http ) throws Exception {
+        http.cors();
         http.csrf()
                 .disable()
                 .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/v1/clients/register")
+                .permitAll()
                 .antMatchers(
                         "/api/v1/employees/**",
                         "/api/v1/clients/**"
