@@ -1,8 +1,8 @@
-import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { TUserAuth } from "../types/typesUser";
+import { TUserAuth } from "../types/types";
+import axios from "axios";
 
-const backendURL = "http://127.0.0.1:8080";
+const backendURL = "http://localhost:8080";
 
 export const registerUser = createAsyncThunk(
   "auth/register",

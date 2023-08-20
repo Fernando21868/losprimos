@@ -1,4 +1,5 @@
 "use client";
+import { Loader2 } from "lucide-react"
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,8 +15,16 @@ import {
 } from "../../@components/ui/form";
 import { Input } from "../../@components/ui/input";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { StateAuthSlice } from "../../types/interfaces";
+import { RootState } from "../../store/store";
 
 function Register() {
+  const { loading, userInfo, error, success }: StateAuthSlice = useSelector(
+    (state: RootState) => state["auth"]
+  );
+  const dispatch = useDispatch();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,14 +40,11 @@ function Register() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
     <div className="p-4 flex flex-col items-center justify-center">
+      {error && "error"}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -168,9 +174,16 @@ function Register() {
               </FormItem>
             )}
           />
-          <Button className="mt-4" type="submit">
-            Registrarse
-          </Button>
+          {loading ? (
+            <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Por favor espere
+            </Button>
+          ) : (
+            <Button className="mt-4" type="submit">
+              Registrarse
+            </Button>
+          )}
           <div>
             ¿Tienes una cuenta?
             <Button className="-ml-2" variant="link">
@@ -244,14 +257,9 @@ const formSchema = z
       .email({
         message: "Ingrese un email valido",
       }),
-    birthday: z
-      .string().optional(),
-    phoneNumber: z
-      .string()
-      .optional(),
-    address: z
-      .string()
-      .optional(),
+    birthday: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    address: z.string().optional(),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {

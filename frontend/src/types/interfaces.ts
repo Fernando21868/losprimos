@@ -1,4 +1,4 @@
-import { TUserAuth } from "./typesUser";
+import { TUserAuth } from "./types";
 
 export type StateAuthSlice = {
   loading: boolean | undefined,
