@@ -1,6 +1,7 @@
 package com.example.backend.dto.request;
 
 import com.example.backend.annotation.PasswordValueMatch;
+import com.example.backend.annotation.ValidEmail;
 import com.example.backend.annotation.ValidPassword;
 import com.example.backend.model.Role;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDtoRequest {
 
-    @Email(message = "Por favor introdusca un email valido")
+    @ValidEmail(message = "Por favor introduzca un email valido")
+    @NotNull(message = "Por favor introduzca un email")
     @NotBlank(message = "Por favor introduzca un email")
     private String email;
 

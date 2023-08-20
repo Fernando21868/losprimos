@@ -1,10 +1,12 @@
 package com.example.backend.service;
 
 import com.example.backend.config.ModelMapperConfig;
+import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.response.ClientDtoResponse;
 import com.example.backend.dto.request.ClientDtoRequest;
 import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.ClientNotFoundException;
+import com.example.backend.exceptions.UserAlreadExistException;
 import com.example.backend.model.Client;
 import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
@@ -20,12 +22,13 @@ import java.util.stream.Collectors;
 public class ClientService implements IClientService{
 
     private final IClientRepository clientRepository;
-
     private final ModelMapperConfig mapper;
+    private final PasswordEncoderConfig passwordEncoderConfig;
 
-    public ClientService(IClientRepository clientRepository, ModelMapperConfig mapper){
+    public ClientService(IClientRepository clientRepository, ModelMapperConfig mapper, PasswordEncoderConfig passwordEncoderConfig){
         this.clientRepository = clientRepository;
         this.mapper = mapper;
+        this.passwordEncoderConfig = passwordEncoderConfig;
     }
 
     @Override
@@ -45,12 +48,19 @@ public class ClientService implements IClientService{
 
     @Override
     public ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientCreateDtoRequest) {
+        if(emailExists(clientCreateDtoRequest.getEmail())){
+            throw new UserAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+        }
+        if(usernameExists(clientCreateDtoRequest.getUsername())){
+            throw new UserAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
+        }
         Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
         Role role = new Role();
         role.setRol(RoleEnum.CLIENT);
         List<Role> roles = new ArrayList<>();
         roles.add(role);
         client.setRoles(roles);
+        client.setPassword(passwordEncoderConfig.passwordEncoder().encode(client.getPassword()));
         Client clientPersist = clientRepository.save(client);
         ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientPersist, ClientDtoResponse.class);
         return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
@@ -79,5 +89,13 @@ public class ClientService implements IClientService{
         }
         throw  new ClientNotFoundException("No se encontro el cliente para ser eliminado");
 
+    }
+
+    private boolean emailExists(String email){
+        return clientRepository.findByEmail(email) != null;
+    }
+
+    private boolean usernameExists(String username){
+        return clientRepository.findByUsername(username) != null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
 import com.example.backend.dto.response.UserAuthenticateDtoResponse;
 import com.example.backend.exceptions.UserNotFoundException;
@@ -24,27 +25,37 @@ import static com.example.backend.util.CONSTANTS.SECRET_KEY_TOKEN;
 @Service
 public class SessionServiceImpl implements ISessionService {
     private final IUserRepository userRepository;
+    private final PasswordEncoderConfig passwordEncoderConfig;
 
-    public SessionServiceImpl ( IUserRepository userRepository ) {
+    public SessionServiceImpl ( IUserRepository userRepository, PasswordEncoderConfig passwordEncoderConfig ) {
         this.userRepository = userRepository;
+        this.passwordEncoderConfig = passwordEncoderConfig;
     }
 
     @Override
     public UserAuthenticateDtoResponse login (UserAuthenticateDtoRequest userAuthenticateDtoRequest ) {
         //Voy a la base de datos y reviso que el usuario y contraseña existan.
         // ToDo: se podria agregar alguna libreria para encriptar la password
-        String username = userAuthenticateDtoRequest.getUsername();
-        User user = userRepository.findByUsernameAndPassword(username, userAuthenticateDtoRequest.getPassword())
-          .orElseThrow(UserNotFoundException::new);
+
+        String usernameDto = userAuthenticateDtoRequest.getUsername();
+        String passwordDto = userAuthenticateDtoRequest.getPassword();
+
+        User user = userRepository.findByUsername(usernameDto).orElseThrow(UserNotFoundException::new);
+        if(!passwordEncoderConfig.passwordEncoder().matches(passwordDto, user.getPassword())){
+            throw new UserNotFoundException();
+        }
+
+        // User user = userRepository.findByUsernameAndPassword(username, userAuthenticateDtoRequest.getPassword())
+        //  .orElseThrow(UserNotFoundException::new);
 
         List<String> roles = user.getRoles()
           .stream()
           .map(e -> e.getRol().getText())
           .collect(Collectors.toList());
 
-        String token = getJWTToken(username, roles);
+        String token = getJWTToken(usernameDto, roles);
 
-        return new UserAuthenticateDtoResponse(username, token);
+        return new UserAuthenticateDtoResponse(usernameDto, token);
     }
 
     /**
