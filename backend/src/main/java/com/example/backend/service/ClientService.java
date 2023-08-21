@@ -6,7 +6,7 @@ import com.example.backend.dto.response.ClientDtoResponse;
 import com.example.backend.dto.request.ClientDtoRequest;
 import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.ClientNotFoundException;
-import com.example.backend.exceptions.UserAlreadExistException;
+import com.example.backend.exceptions.UsernameAlreadExistException;
 import com.example.backend.model.Client;
 import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
@@ -49,10 +49,10 @@ public class ClientService implements IClientService{
     @Override
     public ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientCreateDtoRequest) {
         if(emailExists(clientCreateDtoRequest.getEmail())){
-            throw new UserAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
         }
         if(usernameExists(clientCreateDtoRequest.getUsername())){
-            throw new UserAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
         }
         Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
         Role role = new Role();
@@ -94,10 +94,10 @@ public class ClientService implements IClientService{
     @Override
     public ResponseSuccessDto<ClientDtoResponse> registerClient(ClientDtoRequest clientCreateDtoRequest) {
         if(emailExists(clientCreateDtoRequest.getEmail())){
-            throw new UserAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
         }
         if(usernameExists(clientCreateDtoRequest.getUsername())){
-            throw new UserAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el username: " + clientCreateDtoRequest.getUsername());
         }
         Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
         Role role = new Role();
@@ -111,11 +111,20 @@ public class ClientService implements IClientService{
         return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
     }
 
+    @Override
+    public ClientDtoResponse getClientByUsername(String username) {
+        Optional<Client> client = clientRepository.findByUsername(username);
+        if(client.isPresent()){
+            return mapper.modelMapper().map(client.get(), ClientDtoResponse.class);
+        }
+        throw new ClientNotFoundException("No se encontro el cliente con el id especificado");
+    }
+
     private boolean emailExists(String email){
         return clientRepository.findByEmail(email) != null;
     }
 
     private boolean usernameExists(String username){
-        return clientRepository.findByUsername(username) != null;
+        return clientRepository.findByUsername(username).orElseThrow(null) != null;
     }
 }

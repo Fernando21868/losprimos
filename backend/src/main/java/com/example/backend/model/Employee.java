@@ -33,7 +33,7 @@ public class Employee extends User{
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public Employee(Long id, String email, String firstName, String lastName, String phoneNumber, String birthday, String address, String username, String password, List<Role> roles, Long id1, String type, String permission, Date vacations, Integer dni, Timestamp createdAt, Timestamp updatedAt) {
+    public Employee(Long id, String email, String firstName, String lastName, String phoneNumber, Date birthday, String address, String username, String password, List<Role> roles, Long id1, String type, String permission, Date vacations, Integer dni, Timestamp createdAt, Timestamp updatedAt) {
         super(id, email, firstName, lastName, phoneNumber, birthday, address, username, password, roles);
         this.id = id1;
         this.type = type;

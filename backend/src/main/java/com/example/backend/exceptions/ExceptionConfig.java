@@ -22,6 +22,13 @@ public class ExceptionConfig {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({UsernameAlreadExistException.class, EmailAlreadExistException.class})
+    public ResponseEntity<?> usernameEmailFoundException(RuntimeException exception){
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, 404, exception.getMessage(), true);
+        return new ResponseEntity<>(responseErrorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseErrorDto handleValidationExceptions(MethodArgumentNotValidException ex) {
 

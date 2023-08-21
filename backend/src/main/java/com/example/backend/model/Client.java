@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,7 +30,7 @@ public class Client extends User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public Client(Long id, String email, String firstName, String lastName, String phoneNumber, String birthday, String address, String username, String password, List<Role> roles, Long id1, String comment, String cart, String favoriteItem, Double amountSpent, Timestamp createdAt, Timestamp updatedAt) {
+    public Client(Long id, String email, String firstName, String lastName, String phoneNumber, Date birthday, String address, String username, String password, List<Role> roles, Long id1, String comment, String cart, String favoriteItem, Double amountSpent, Timestamp createdAt, Timestamp updatedAt) {
         super(id, email, firstName, lastName, phoneNumber, birthday, address, username, password, roles);
         this.id = id1;
         this.comment = comment;

@@ -13,9 +13,23 @@ import {
   FormMessage,
 } from "../../@components/ui/form";
 import { Input } from "../../@components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { RootState } from "../../store/store";
+import { useSelector } from "react-redux";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../data/authActions";
+import { Loader2 } from "lucide-react";
+import LayoutClient from "../../@components/layoutClient/LayoutClient";
+import { useEffect } from "react";
 
 function Login() {
+  const { loading, error, userInfo } = useSelector(
+    (state: RootState) => state["auth"]
+  );
+  const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,13 +40,19 @@ function Login() {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    dispatch(userLogin(values));
+    navigate("/");
   }
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  });
 
   return (
     <div className="p-4 flex flex-col items-center justify-center">
+      {error && "error"}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -68,9 +88,16 @@ function Login() {
               </FormItem>
             )}
           />
-          <Button className="mt-4" type="submit">
-            Iniciar sesion
-          </Button>
+          {loading ? (
+            <Button className="mt-4" disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Por favor espere
+            </Button>
+          ) : (
+            <Button className="mt-4" type="submit">
+              Iniciar sesion
+            </Button>
+          )}
           <div>
             ¿No tesnes una cuenta todavia?
             <Button className="-ml-2" variant="link">

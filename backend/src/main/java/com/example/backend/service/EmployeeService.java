@@ -6,7 +6,7 @@ import com.example.backend.dto.request.EmployeeDtoRequest;
 import com.example.backend.dto.response.EmployeeDtoResponse;
 import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.EmployeeNotFoundException;
-import com.example.backend.exceptions.UserAlreadExistException;
+import com.example.backend.exceptions.UsernameAlreadExistException;
 import com.example.backend.model.Employee;
 import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
@@ -51,10 +51,10 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public ResponseSuccessDto<EmployeeDtoResponse> createEmployee(EmployeeDtoRequest employeeDtoRequest) {
         if(emailExists(employeeDtoRequest.getEmail())){
-            throw new UserAlreadExistException("Actualmente ya existe un empleado con el email: " + employeeDtoRequest.getEmail());
+            throw new UsernameAlreadExistException("Actualmente ya existe un empleado con el email: " + employeeDtoRequest.getEmail());
         }
         if(usernameExists(employeeDtoRequest.getUsername())){
-            throw new UserAlreadExistException("Actualmente ya existe un empleado con el username: " + employeeDtoRequest.getUsername());
+            throw new UsernameAlreadExistException("Actualmente ya existe un empleado con el username: " + employeeDtoRequest.getUsername());
         }
         Employee employee = mapper.modelMapper().map(employeeDtoRequest, Employee.class);
         if(employee.getRoles()!=null) {

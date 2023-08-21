@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +22,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String birthday;
+    private Date birthday;
     private String address;
     private String username;
     private String password;
