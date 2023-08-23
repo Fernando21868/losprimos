@@ -3,6 +3,7 @@ package com.example.backend.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
+@SuperBuilder
 @Getter
 @Setter
 @Entity
@@ -30,14 +32,5 @@ public class Client extends User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public Client(Long id, String email, String firstName, String lastName, String phoneNumber, Date birthday, String address, String username, String password, List<Role> roles, Long id1, String comment, String cart, String favoriteItem, Double amountSpent, Timestamp createdAt, Timestamp updatedAt) {
-        super(id, email, firstName, lastName, phoneNumber, birthday, address, username, password, roles);
-        this.id = id1;
-        this.comment = comment;
-        this.cart = cart;
-        this.favoriteItem = favoriteItem;
-        this.amountSpent = amountSpent;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+
 }

@@ -3,6 +3,7 @@ package com.example.backend.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 public class Employee extends User{
 
@@ -33,14 +35,4 @@ public class Employee extends User{
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public Employee(Long id, String email, String firstName, String lastName, String phoneNumber, Date birthday, String address, String username, String password, List<Role> roles, Long id1, String type, String permission, Date vacations, Integer dni, Timestamp createdAt, Timestamp updatedAt) {
-        super(id, email, firstName, lastName, phoneNumber, birthday, address, username, password, roles);
-        this.id = id1;
-        this.type = type;
-        this.permission = permission;
-        this.vacations = vacations;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.dni = dni;
-    }
 }

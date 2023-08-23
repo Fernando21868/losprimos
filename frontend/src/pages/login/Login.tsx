@@ -20,7 +20,6 @@ import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../data/authActions";
 import { Loader2 } from "lucide-react";
-import LayoutClient from "../../@components/layoutClient/LayoutClient";
 import { useEffect } from "react";
 
 function Login() {
@@ -39,9 +38,9 @@ function Login() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatch(userLogin(values));
-    navigate("/");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await dispatch(userLogin(values));
+    window.location.reload();
   }
 
   useEffect(() => {

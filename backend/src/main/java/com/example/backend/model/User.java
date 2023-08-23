@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -26,6 +27,8 @@ public class User {
     private String address;
     private String username;
     private String password;
+    private String verificationCode;
+    private Boolean enabled;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();

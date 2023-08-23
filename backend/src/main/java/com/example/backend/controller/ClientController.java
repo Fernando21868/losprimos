@@ -4,13 +4,17 @@ import com.example.backend.dto.request.ClientDtoRequest;
 import com.example.backend.service.ClientService;
 import com.example.backend.service.IClientService;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/api/v1/clients")
@@ -57,8 +61,18 @@ public class ClientController {
 
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:5173")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDtoRequest clientDtoRequest){
-        return new ResponseEntity<>(clientService.registerClient(clientDtoRequest), HttpStatus.OK);
+    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDtoRequest clientDtoRequest, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+        return new ResponseEntity<>(clientService.registerClient(clientDtoRequest, getSiteURL(request)), HttpStatus.OK);
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
+
+    @GetMapping("/verifyRegisteredAccount")
+    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
+        return new ResponseEntity<>(clientService.verifyRegisteredAccount(code), HttpStatus.OK);
     }
 
     @GetMapping("/profile/{username}")
@@ -66,4 +80,5 @@ public class ClientController {
     public ResponseEntity<?> getClientByUsername(@PathVariable String username) {
         return new ResponseEntity<>(clientService.getClientByUsername(username), HttpStatus.OK);
     }
+
 }

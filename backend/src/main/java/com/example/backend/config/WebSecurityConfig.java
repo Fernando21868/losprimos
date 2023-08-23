@@ -29,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/clients/profile")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/clients/verifyRegisteredAccount")
+                .permitAll()
                 .antMatchers(
                         "/api/v1/employees/**",
                         "/api/v1/clients/**"
