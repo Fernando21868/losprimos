@@ -5,6 +5,7 @@ import com.example.backend.service.ClientService;
 import com.example.backend.service.IClientService;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -55,7 +56,7 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Long id){
-        return new ResponseEntity<>(clientService.deleteClient(id), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(clientService.deleteClient(id), HttpStatus.OK);
     }
 
 
@@ -71,8 +72,12 @@ public class ClientController {
     }
 
     @GetMapping("/verifyRegisteredAccount")
-    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
-        return new ResponseEntity<>(clientService.verifyRegisteredAccount(code), HttpStatus.OK);
+    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code, HttpServletRequest request){
+        clientService.verifyRegisteredAccount(code);
+        String clientConfirmationPage = "http://localhost:5173/accountVerified";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", clientConfirmationPage);
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("/profile/{username}")

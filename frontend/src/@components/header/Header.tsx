@@ -15,7 +15,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/authSlice";
 import { TUserRegister } from "../../types/types";
-import { useEffect } from "react";
+import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   userInfo: TUserRegister | null;
@@ -23,10 +35,11 @@ type Props = {
 
 const Header = ({ userInfo }: Props) => {
   const dispatch = useDispatch();
+  const [position, setPosition] = useState("bottom");
 
   return (
-    <Menubar className="flex flex-row w-screen h-auto justify-between">
-      <div className="flex flex-row">
+    <Menubar className="flex flex-row w-screen h-auto justify-end px-4 border-t-0 border-l-0 border-r-0 rounded-none min-[768px]:justify-between">
+      <div className="hidden min-[768px]:flex flex-row ">
         <MenubarMenu>
           <MenubarTrigger className="cursor-pointer">File</MenubarTrigger>
         </MenubarMenu>
@@ -68,6 +81,31 @@ const Header = ({ userInfo }: Props) => {
         ) : (
           ""
         )}
+        <div className="min-[768px]:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <FontAwesomeIcon className="text-base" icon={faBars} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={position}
+                onValueChange={setPosition}
+              >
+                <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="bottom">
+                  Bottom
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="right">
+                  Right
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </Menubar>
   );

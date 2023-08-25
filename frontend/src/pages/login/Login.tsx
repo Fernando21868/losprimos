@@ -55,7 +55,7 @@ function Login() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="p-4 max-w-md w-full"
+          className="max-w-md w-full"
         >
           <FormField
             control={form.control}
