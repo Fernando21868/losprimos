@@ -1,15 +1,13 @@
+import { SideBar } from "../sideBar/SideBar";
 import { Outlet } from "react-router-dom";
 import Footer from "../footer/Footer";
-import Header from "../header/Header";
 
-function LayoutClient() {
+export const LayoutAdmin = () => {
   return (
     <div className="flex flex-col">
-      <Header></Header>
+      <SideBar></SideBar>
       <Outlet></Outlet>
       <Footer></Footer>
     </div>
   );
-}
-
-export default LayoutClient;
+};

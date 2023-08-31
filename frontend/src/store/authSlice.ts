@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { StateAuthSlice } from "../types/interfaces";
 import { registerUser } from "../data/authActions";
 import { userLogin } from "../data/authActions";
+import { PURGE } from "redux-persist";
 
 const userToken = localStorage.getItem("userToken");
 const username = localStorage.getItem("username");

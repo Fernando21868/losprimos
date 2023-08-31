@@ -2,13 +2,18 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.request.EmployeeDtoRequest;
 import com.example.backend.dto.response.EmployeeDtoResponse;
+import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.service.EmployeeService;
 import com.example.backend.service.IEmployeeService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -43,6 +48,35 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id){
         return new ResponseEntity<>(employeeService.deleteEmployee(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public ResponseEntity<?> registerEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+        return new ResponseEntity<>(employeeService.registerEmployee(employeeDtoRequest, getSiteURL(request)), HttpStatus.OK);
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }
+
+    @GetMapping("/verifyRegisteredAccount")
+    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
+        ResponseSuccessDto<EmployeeDtoResponse> responseSuccessDto = employeeService.verifyRegisteredAccount(code);
+        if(!responseSuccessDto.getError()){
+            String clientConfirmationPage = "http://localhost:5173/accountVerified";
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", clientConfirmationPage);
+            return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        }
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/profile/{username}")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public ResponseEntity<?> getEmployeeByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(employeeService.getEmployeeByUsername(username), HttpStatus.OK);
     }
 }
 

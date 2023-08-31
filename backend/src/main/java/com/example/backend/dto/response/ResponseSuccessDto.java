@@ -1,11 +1,11 @@
 package com.example.backend.dto.response;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class ResponseSuccessDto<T> extends ResponseDto {
 

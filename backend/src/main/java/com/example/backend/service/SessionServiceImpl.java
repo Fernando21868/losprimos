@@ -75,7 +75,7 @@ public class SessionServiceImpl implements ISessionService {
           .collect(Collectors.toList());
 
         LocalDateTime expired = LocalDateTime.now()
-          .plusMinutes(30);
+          .plusMinutes(120);
         Date expiredTime = Date.from(expired.atZone(ZoneId.systemDefault())
           .toInstant());
 

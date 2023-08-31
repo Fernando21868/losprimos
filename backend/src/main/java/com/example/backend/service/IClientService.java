@@ -10,13 +10,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface IClientService {
-    ResponseSuccessDto getAllClients();
-    ResponseSuccessDto getClientById(Long id);
-    ResponseSuccessDto createClient(ClientDtoRequest clientCreateDtoRequest);
-    ResponseSuccessDto updateClient(Long id, ClientDtoRequest clientCreateDtoRequest);
-    ResponseSuccessDto deleteClient(Long id);
-    ResponseSuccessDto registerClient(ClientDtoRequest clientCreateDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException;
+    ResponseSuccessDto<List<ClientDtoResponse>> getAllClients();
+    ResponseSuccessDto<ClientDtoResponse> getClientById(Long id);
+    ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientCreateDtoRequest);
+    ResponseSuccessDto<ClientDtoResponse> updateClient(Long id, ClientDtoRequest clientCreateDtoRequest);
+    ResponseSuccessDto<ClientDtoResponse> deleteClient(Long id);
+    ResponseSuccessDto<ClientDtoResponse> registerClient(ClientDtoRequest clientCreateDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException;
     ClientDtoResponse getClientByUsername(String username);
-    ResponseSuccessDto verifyRegisteredAccount(String verificationCode);
+    ResponseSuccessDto<ClientDtoResponse> verifyRegisteredAccount(String verificationCode);
 
 }

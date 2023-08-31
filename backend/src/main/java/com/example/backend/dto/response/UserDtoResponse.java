@@ -1,17 +1,15 @@
 package com.example.backend.dto.response;
 
 import com.example.backend.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 public class UserDtoResponse {
 
     private String email;
@@ -19,7 +17,8 @@ public class UserDtoResponse {
     private String lastName;
     private String phoneNumber;
     private String birthday;
-    private String address;
     private String username;
     private List<Role> roles;
+
+    private AddressDtoResponse address;
 }

@@ -20,11 +20,17 @@ import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../data/authActions";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Checkbox } from "../../@components/ui/checkbox";
+import { toast } from "../../@components/ui/use-toast";
+import { ToastAction } from "../../@components/ui/toast";
+import { Toaster } from "../../@components/ui/toaster";
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { loading, error, userInfo } = useSelector(
-    (state: RootState) => state["auth"]
+    (state: RootState) => state.auth
   );
   const dispatch = useDispatch<ThunkDispatch<RootState, any, AnyAction>>();
   const navigate = useNavigate();
@@ -39,8 +45,21 @@ function Login() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await dispatch(userLogin(values));
-    window.location.reload();
+    const response = await dispatch(userLogin(values));
+    if (response.type === "auth/login/rejected") {
+      toast({
+        variant: "destructive",
+        title: "Algo ocurrio mal.",
+        description: response.payload as string,
+        action: (
+          <ToastAction className="left-0 top-0" altText="Cerrar">
+            Intentar nuevamente
+          </ToastAction>
+        ),
+      });
+    } else {
+      window.location.reload();
+    }
   }
 
   useEffect(() => {
@@ -49,14 +68,18 @@ function Login() {
     }
   });
 
+  function handleShowPassword() {
+    setShowPassword(!showPassword);
+  }
+
   return (
     <div className="p-4 flex flex-col items-center justify-center">
-      {error && "error"}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="max-w-md w-full"
         >
+          <Toaster></Toaster>
           <FormField
             control={form.control}
             name="username"
@@ -77,7 +100,11 @@ function Login() {
               <FormItem>
                 <FormLabel>Contraseña</FormLabel>
                 <FormControl>
-                  <Input placeholder="Por ejemplo: Lucas123" {...field} />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Por ejemplo: Lucas123"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   La contraseña debe cotener por lo menos 4 caracteres, 1
@@ -87,6 +114,15 @@ function Login() {
               </FormItem>
             )}
           />
+          <div className="mt-2 mb-4 flex items-center space-x-2">
+            <Checkbox onClick={handleShowPassword} id="showPassword" />
+            <label
+              htmlFor="showPassword"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Mostrar/ocultar contraseña
+            </label>
+          </div>
           {loading ? (
             <Button className="mt-4" disabled>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -112,7 +148,7 @@ function Login() {
 const formSchema = z.object({
   username: z
     .string()
-    .min(1, {
+    .nonempty({
       message: "Debe ingresar un nombre de usuario",
     })
     .max(30, {
@@ -120,7 +156,7 @@ const formSchema = z.object({
     }),
   password: z
     .string()
-    .min(1, {
+    .nonempty({
       message: "Debe ingresar una contraseña",
     })
     .max(30, {

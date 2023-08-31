@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +15,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
-@Getter
-@Setter
+@Data
 @Entity
 public class Client extends User {
 

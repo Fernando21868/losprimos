@@ -1,33 +1,37 @@
 package com.example.backend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
-@Data
-@NoArgsConstructor
-@SuperBuilder
 @Entity
-public class Employee extends User{
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
-    private Date vacations;
-    private Integer dni;
+
+    private String name;
+    private String description;
+    private String photo;
+    private Double price;
+    private Double stock;
+    private Date expirityDate;
+    private String brand;
+    private String supplier;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @CreationTimestamp
     private Timestamp createdAt;

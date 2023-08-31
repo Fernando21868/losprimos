@@ -24,7 +24,6 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private Date birthday;
-    private String address;
     private String username;
     private String password;
     private String verificationCode;
@@ -33,4 +32,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 }

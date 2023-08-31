@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.config.EmailConfig;
 import com.example.backend.config.ModelMapperConfig;
 import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.response.ClientDtoResponse;
@@ -12,17 +13,15 @@ import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
 import com.example.backend.repository.IClientRepository;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// Service for clients - CRUD operations
 @Service
 public class ClientService implements IClientService{
 
@@ -30,14 +29,15 @@ public class ClientService implements IClientService{
     private final IClientRepository clientRepository;
     private final ModelMapperConfig mapper;
     private final PasswordEncoderConfig passwordEncoderConfig;
-    private final JavaMailSender mailSender;
+    private final EmailConfig emailConfig;
+
 
     // Constructor for dependencies
-    public ClientService(IClientRepository clientRepository, ModelMapperConfig mapper, PasswordEncoderConfig passwordEncoderConfig, JavaMailSender mailSender){
+    public ClientService(IClientRepository clientRepository, ModelMapperConfig mapper, PasswordEncoderConfig passwordEncoderConfig, EmailConfig emailConfig){
         this.clientRepository = clientRepository;
         this.mapper = mapper;
         this.passwordEncoderConfig = passwordEncoderConfig;
-        this.mailSender = mailSender;
+        this.emailConfig = emailConfig;
     }
 
     /***
@@ -68,18 +68,18 @@ public class ClientService implements IClientService{
 
     /***
      * Service to create a client
-     * @param clientCreateDtoRequest data to create a client
+     * @param clientDtoRequest data to create a client
      * @return the client created
      */
     @Override
-    public ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientCreateDtoRequest) {
-        if(emailExists(clientCreateDtoRequest.getEmail())){
-            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+    public ResponseSuccessDto<ClientDtoResponse> createClient(ClientDtoRequest clientDtoRequest) {
+        if(emailExists(clientDtoRequest.getEmail())){
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientDtoRequest.getEmail());
         }
-        if(usernameExists(clientCreateDtoRequest.getUsername())){
-            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el usuario: " + clientCreateDtoRequest.getUsername());
+        if(usernameExists(clientDtoRequest.getUsername())){
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el usuario: " + clientDtoRequest.getUsername());
         }
-        Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
+        Client client = mapper.modelMapper().map(clientDtoRequest, Client.class);
         Role role = new Role();
         role.setRol(RoleEnum.CLIENT);
         List<Role> roles = new ArrayList<>();
@@ -94,15 +94,21 @@ public class ClientService implements IClientService{
     /***
      * Service to update a client by an unique id
      * @param id unique id to find a client and updated it
-     * @param clientCreateDtoRequest data to update the client
+     * @param clientDtoRequest data to update the client
      * @return the client updated
      */
     @Override
-    public ResponseSuccessDto<ClientDtoResponse> updateClient(Long id, ClientDtoRequest clientCreateDtoRequest) {
+    public ResponseSuccessDto<ClientDtoResponse> updateClient(Long id, ClientDtoRequest clientDtoRequest) {
+        if (emailExists(clientDtoRequest.getEmail())) {
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientDtoRequest.getEmail());
+        }
+        if (usernameExists(clientDtoRequest.getUsername())) {
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el usuario: " + clientDtoRequest.getUsername());
+        }
         Optional<Client> client = clientRepository.findById(id);
         if(client.isPresent()){
             Client clientExisting = client.get();
-            mapper.modelMapper().map(clientCreateDtoRequest, clientExisting);
+            mapper.modelMapper().map(clientDtoRequest, clientExisting);
             Client clientUpdated = clientRepository.save(clientExisting);
             ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientUpdated, ClientDtoResponse.class);
             return new ResponseSuccessDto<>(clientDtoResponse, 200, "El cliente fue actulizado con exito", false);
@@ -121,7 +127,6 @@ public class ClientService implements IClientService{
         Optional<Client> client = clientRepository.findById(id);
         if(client.isPresent()){
             clientRepository.deleteById(id);
-            mapper.modelMapper().map(client.get(), ClientDtoResponse.class);
             return new ResponseSuccessDto<>(null, 204, "El cliente fue eliminado con exito", false);
         }
         throw  new ClientNotFoundException("No se encontro el cliente para ser eliminado");
@@ -129,21 +134,21 @@ public class ClientService implements IClientService{
 
     /***
      * Service to register a client and send an email for verify an account
-     * @param clientCreateDtoRequest the data to register a new client
+     * @param clientDtoRequest the data to register a new client
      * @param siteURL the URL to add to the email to verify the client by an email
      * @return the client being created
      * @throws UnsupportedEncodingException exception
      * @throws MessagingException exception
      */
     @Override
-    public ResponseSuccessDto<ClientDtoResponse> registerClient(ClientDtoRequest clientCreateDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException {
-        if(emailExists(clientCreateDtoRequest.getEmail())){
-            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientCreateDtoRequest.getEmail());
+    public ResponseSuccessDto<ClientDtoResponse> registerClient(ClientDtoRequest clientDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException {
+        if (emailExists(clientDtoRequest.getEmail())) {
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el email: " + clientDtoRequest.getEmail());
         }
-        if(usernameExists(clientCreateDtoRequest.getUsername())){
-            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el usuario: " + clientCreateDtoRequest.getUsername());
+        if (usernameExists(clientDtoRequest.getUsername())) {
+            throw new UsernameAlreadExistException("Actualmente ya existe un cliente con el usuario: " + clientDtoRequest.getUsername());
         }
-        Client client = mapper.modelMapper().map(clientCreateDtoRequest, Client.class);
+        Client client = mapper.modelMapper().map(clientDtoRequest, Client.class);
         Role role = new Role();
         role.setRol(RoleEnum.CLIENT);
         List<Role> roles = new ArrayList<>();
@@ -155,9 +160,11 @@ public class ClientService implements IClientService{
         client.setEnabled(false);
         Client clientPersist = clientRepository.save(client);
         ClientDtoResponse clientDtoResponse = mapper.modelMapper().map(clientPersist, ClientDtoResponse.class);
-        sendVerificationEmail(client, siteURL);
+        emailConfig.sendVerificationEmail(client, siteURL);
         return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
     }
+
+    // TODO: DE AQUI EN ADELANTE VER SI SE PUEDE REFACTORIZAR
 
     /***
      * Service to get a client by the username
@@ -190,42 +197,6 @@ public class ClientService implements IClientService{
             return new ResponseSuccessDto<>(clientDtoResponse, 201, "El cliente fue creado con exito", false);
         }
         throw new ClientNotFoundException("La verificacion de la cuenta no tuvo exito, el codigo no existe");
-    }
-
-    /***
-     * Method to send an email and a link to verify the registered account of a client
-     * @param client data of a client that was registered
-     * @param siteURL URL to create a link to send to the email of a client
-     * @throws MessagingException exception
-     * @throws UnsupportedEncodingException exception
-     */
-    private void sendVerificationEmail(Client client, String siteURL) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = client.getEmail();
-        String fromAddress = "elderarias2015@gmail.com";
-        String senderName = "losprimos";
-        String subject = "Por favor, verifiquese para terminar con la registracion.";
-        String content = "Querido [[name]],<br>"
-                + "Haga click en el enlace de abajo para verificar su cuenta:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Muchas gracias,<br>"
-                + "losprimos.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", client.getFirstName());
-        String verifyURL = siteURL + "/api/v1/clients/verifyRegisteredAccount?code=" + client.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
-
     }
 
     /***

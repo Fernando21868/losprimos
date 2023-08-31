@@ -1,17 +1,16 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.request.ClientDtoRequest;
+import com.example.backend.dto.response.ClientDtoResponse;
+import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.service.ClientService;
 import com.example.backend.service.IClientService;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -50,8 +49,8 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDtoRequest clientCreateDtoRequest) {
-        return new ResponseEntity<>(clientService.updateClient(id, clientCreateDtoRequest), HttpStatus.OK);
+    public ResponseEntity<?> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDtoRequest clientUpdateDtoRequest) {
+        return new ResponseEntity<>(clientService.updateClient(id, clientUpdateDtoRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -72,12 +71,15 @@ public class ClientController {
     }
 
     @GetMapping("/verifyRegisteredAccount")
-    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code, HttpServletRequest request){
-        clientService.verifyRegisteredAccount(code);
-        String clientConfirmationPage = "http://localhost:5173/accountVerified";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", clientConfirmationPage);
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+    public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
+        ResponseSuccessDto<ClientDtoResponse> responseSuccessDto = clientService.verifyRegisteredAccount(code);
+        if(!responseSuccessDto.getError()){
+            String clientConfirmationPage = "http://localhost:5173/accountVerified";
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", clientConfirmationPage);
+            return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        }
+        return new ResponseEntity<>(responseSuccessDto, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/profile/{username}")

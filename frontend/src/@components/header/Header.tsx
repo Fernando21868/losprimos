@@ -14,8 +14,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/authSlice";
-import { TUserRegister } from "../../types/types";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,14 +26,14 @@ import {
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
-type Props = {
-  userInfo: TUserRegister | null;
-};
-
-const Header = ({ userInfo }: Props) => {
+const Header = () => {
   const dispatch = useDispatch();
   const [position, setPosition] = useState("bottom");
+
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   return (
     <Menubar className="flex flex-row w-screen h-auto justify-end px-4 border-t-0 border-l-0 border-r-0 rounded-none min-[768px]:justify-between">

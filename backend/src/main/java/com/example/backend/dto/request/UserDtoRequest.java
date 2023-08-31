@@ -3,10 +3,12 @@ package com.example.backend.dto.request;
 import com.example.backend.annotation.PasswordValueMatch;
 import com.example.backend.annotation.ValidEmail;
 import com.example.backend.annotation.ValidPassword;
+import com.example.backend.model.Address;
 import com.example.backend.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -15,7 +17,7 @@ import java.util.List;
 @PasswordValueMatch.List({@PasswordValueMatch(field = "password", fieldMatch = "confirmPassword", message = "Las contraseñas no coinciden")})
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder
 public class UserDtoRequest {
 
     //@ValidEmail(message = "Por favor introduzca un email valido")
@@ -52,8 +54,7 @@ public class UserDtoRequest {
     @PastOrPresent(message = "La fecha de nacimiento debe ser anterior a la actual")
     private Date birthday;
 
-    @Size(max = 100, message = "La direccion debe contener por lo menos 30 caracteres")
-    private String address;
+    private AddressDtoRequest address;
 
     @Size(min = 1, max = 3)
     private List<Role> roles;
