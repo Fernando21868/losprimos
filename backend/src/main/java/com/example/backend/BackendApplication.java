@@ -1,6 +1,5 @@
 package com.example.backend;
 
-import com.example.backend.model.Employee;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +20,8 @@ public class BackendApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 				 .allowedOrigins("http://localhost:5173")
-				 .allowedMethods("GET", "POST", "PUT", "DELETE")
-						.allowedHeaders("*")
+				 .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
+				 .allowedHeaders("*")
 				 .maxAge(3600);
 			}
 		};

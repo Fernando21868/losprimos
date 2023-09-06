@@ -24,10 +24,10 @@ import static com.example.backend.util.CONSTANTS.SECRET_KEY_TOKEN;
 
 @Service
 public class SessionServiceImpl implements ISessionService {
-    private final IUserRepository userRepository;
+    private final IUserRepository<User> userRepository;
     private final PasswordEncoderConfig passwordEncoderConfig;
 
-    public SessionServiceImpl ( IUserRepository userRepository, PasswordEncoderConfig passwordEncoderConfig ) {
+    public SessionServiceImpl ( IUserRepository<User> userRepository, PasswordEncoderConfig passwordEncoderConfig ) {
         this.userRepository = userRepository;
         this.passwordEncoderConfig = passwordEncoderConfig;
     }
@@ -40,9 +40,9 @@ public class SessionServiceImpl implements ISessionService {
         String usernameDto = userAuthenticateDtoRequest.getUsername();
         String passwordDto = userAuthenticateDtoRequest.getPassword();
 
-        User user = userRepository.findByUsername(usernameDto).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByUsername(usernameDto).orElseThrow(()-> new UserNotFoundException("No se encontre el usuario con el nombre de usuario dado"));
         if(!passwordEncoderConfig.passwordEncoder().matches(passwordDto, user.getPassword())){
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("User y/o contraseña incorrecto");
         }
 
         // User user = userRepository.findByUsernameAndPassword(username, userAuthenticateDtoRequest.getPassword())

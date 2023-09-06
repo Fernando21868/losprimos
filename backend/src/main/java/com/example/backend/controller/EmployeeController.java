@@ -20,40 +20,38 @@ import java.io.UnsupportedEncodingException;
 public class EmployeeController {
 
     IEmployeeService employeeService;
-
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
     @GetMapping
     public ResponseEntity<?> getAllEmployees() {
-        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployeeById(@PathVariable Long id) {
-        return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest) {
-        return new ResponseEntity<>(employeeService.createEmployee(employeeDtoRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeService.create(employeeDtoRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDtoRequest employeeDtoRequest) {
-        return new ResponseEntity<>(employeeService.updateEmployee(id, employeeDtoRequest), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.update(id, employeeDtoRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id){
-        return new ResponseEntity<>(employeeService.deleteEmployee(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.delete(id), HttpStatus.OK);
     }
 
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<?> registerEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-        return new ResponseEntity<>(employeeService.registerEmployee(employeeDtoRequest, getSiteURL(request)), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.register(employeeDtoRequest, getSiteURL(request)), HttpStatus.OK);
     }
 
     private String getSiteURL(HttpServletRequest request) {
@@ -76,21 +74,7 @@ public class EmployeeController {
     @GetMapping("/profile/{username}")
     @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<?> getEmployeeByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(employeeService.getEmployeeByUsername(username), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getByUsername(username), HttpStatus.OK);
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

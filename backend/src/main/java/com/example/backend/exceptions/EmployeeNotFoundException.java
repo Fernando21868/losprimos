@@ -1,6 +1,6 @@
 package com.example.backend.exceptions;
 
-public class EmployeeNotFoundException extends RuntimeException{
+public class EmployeeNotFoundException extends UserNotFoundException{
 
     public EmployeeNotFoundException(String message) {
         super(message);
