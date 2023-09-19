@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository<T extends User> extends JpaRepository<T, Long> {
+public interface IUserRepository<Model extends User> extends IPersonRepository<Model> {
 
-    Optional<T> findByEmail(String email);
-    Optional<T> findByUsername(String username);
-    Optional<T> findByVerificationCode(String verificationCode);
+    Optional<Model> findByUsername(String username);
+    Optional<Model> findByVerificationCode(String verificationCode);
 
 }

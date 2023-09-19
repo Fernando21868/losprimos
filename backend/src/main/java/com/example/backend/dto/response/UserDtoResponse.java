@@ -10,15 +10,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class UserDtoResponse {
+public class UserDtoResponse extends PersonDTOResponse{
 
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String birthday;
     private String username;
     private List<Role> roles;
 
-    private AddressDtoResponse address;
 }

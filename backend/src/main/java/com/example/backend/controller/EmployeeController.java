@@ -1,13 +1,22 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.request.AdministratorDTORequest;
 import com.example.backend.dto.request.EmployeeDtoRequest;
+import com.example.backend.dto.response.AdministratorDTOResponse;
 import com.example.backend.dto.response.EmployeeDtoResponse;
 import com.example.backend.dto.response.ResponseSuccessDto;
+import com.example.backend.exceptions.EmployeeNotFoundException;
+import com.example.backend.model.Employee;
+import com.example.backend.repository.IEmployeeRepository;
+import com.example.backend.service.AdministratorService;
 import com.example.backend.service.EmployeeService;
+import com.example.backend.service.IAdministratorService;
 import com.example.backend.service.IEmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -15,43 +24,51 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
-@RestController
-@RequestMapping("/api/v1/employees")
-public class EmployeeController {
+public abstract class EmployeeController<
+        ResponseDTO extends EmployeeDtoResponse,
+        RequestDTO extends EmployeeDtoRequest,
+        Model extends Employee,
+        Repository extends IEmployeeRepository<Model>,
+        NotFoundException extends EmployeeNotFoundException,
+        IService extends IEmployeeService<ResponseDTO, RequestDTO>,
+        Service extends EmployeeService<ResponseDTO, RequestDTO, Model, Repository,
+                NotFoundException>> {
 
-    IEmployeeService employeeService;
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    IService service;
+    public EmployeeController(Service service) {
+        this.service = (IService) service;
     }
+
     @GetMapping
-    public ResponseEntity<?> getAllEmployees() {
-        return new ResponseEntity<>(employeeService.getAll(), HttpStatus.OK);
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEmployeeById(@PathVariable Long id) {
-        return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest) {
-        return new ResponseEntity<>(employeeService.create(employeeDtoRequest), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@Valid @RequestBody RequestDTO employeeDtoRequest) {
+        return new ResponseEntity<>(service.create(employeeDtoRequest), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDtoRequest employeeDtoRequest) {
-        return new ResponseEntity<>(employeeService.update(id, employeeDtoRequest), HttpStatus.OK);
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody RequestDTO employeeDtoRequest) {
+        return new ResponseEntity<>(service.update(id, employeeDtoRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id){
-        return new ResponseEntity<>(employeeService.delete(id), HttpStatus.OK);
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:5173")
-    public ResponseEntity<?> registerEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-        return new ResponseEntity<>(employeeService.register(employeeDtoRequest, getSiteURL(request)), HttpStatus.OK);
+    public ResponseEntity<?> register(@Valid @RequestBody RequestDTO employeeDtoRequest,
+                                                   HttpServletRequest request) throws UnsupportedEncodingException,
+            MessagingException {
+        return new ResponseEntity<>(service.register(employeeDtoRequest, getSiteURL(request)), HttpStatus.OK);
     }
 
     private String getSiteURL(HttpServletRequest request) {
@@ -61,7 +78,7 @@ public class EmployeeController {
 
     @GetMapping("/verifyRegisteredAccount")
     public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
-        ResponseSuccessDto<EmployeeDtoResponse> responseSuccessDto = employeeService.verifyRegisteredAccount(code);
+        ResponseSuccessDto<ResponseDTO> responseSuccessDto = service.verifyRegisteredAccount(code);
         if(!responseSuccessDto.getError()){
             String clientConfirmationPage = "http://localhost:5173/accountVerified";
             HttpHeaders headers = new HttpHeaders();
@@ -73,8 +90,8 @@ public class EmployeeController {
 
     @GetMapping("/profile/{username}")
     @CrossOrigin(origins = "http://localhost:5173")
-    public ResponseEntity<?> getEmployeeByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(employeeService.getByUsername(username), HttpStatus.OK);
+    public ResponseEntity<?> getByUsername(@PathVariable String username) {
+        return new ResponseEntity<>(service.getByUsername(username), HttpStatus.OK);
     }
 
 }

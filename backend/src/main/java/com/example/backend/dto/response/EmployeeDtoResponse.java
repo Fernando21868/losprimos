@@ -12,9 +12,4 @@ import java.util.List;
 @SuperBuilder
 public class EmployeeDtoResponse extends UserDtoResponse {
 
-    private Long id;
-    private String type;
-    private Date vacations;
-    private Integer dni;
-
 }

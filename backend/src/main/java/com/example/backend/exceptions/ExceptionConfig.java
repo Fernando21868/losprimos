@@ -15,7 +15,7 @@ import java.util.Map;
 public class ExceptionConfig {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ClientNotFoundException.class, EmployeeNotFoundException.class})
+    @ExceptionHandler({PatientNotFoundException.class, EmployeeNotFoundException.class})
     public ResponseEntity<?> notFoundException(RuntimeException exception){
         ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, 404, exception.getMessage(), true);
         return new ResponseEntity<>(responseErrorDto, HttpStatus.NOT_FOUND);

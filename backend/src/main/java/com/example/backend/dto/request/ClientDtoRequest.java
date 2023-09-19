@@ -14,5 +14,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class ClientDtoRequest extends UserDtoRequest {
+public class ClientDtoRequest extends PersonDTORequest {
 }

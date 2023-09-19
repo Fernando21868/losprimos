@@ -1,6 +1,5 @@
 package com.example.backend.config;
 
-import com.example.backend.model.Client;
 import com.example.backend.model.User;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;

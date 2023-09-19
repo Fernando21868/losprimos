@@ -31,13 +31,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/clients/verifyRegisteredAccount")
                 .permitAll()
-                .antMatchers(
-                        "/api/v1/employees/**",
-                        "/api/v1/clients/**"
-                ).hasAnyAuthority("ADMIN")//
-                .antMatchers(
-                        "/api/v1/clients/**"
-                ).hasAnyAuthority("EMPLOYEE", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/clients/administrators/**")
+                .permitAll()
+                //.antMatchers(
+                //        "/api/v1/employees/**",
+                //        "/api/v1/clients/**"
+                //).hasAnyAuthority("ADMIN")//
+                //.antMatchers(
+                //        "/api/v1/clients/**"
+                //).hasAnyAuthority("EMPLOYEE", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/sign-in")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/ping")
