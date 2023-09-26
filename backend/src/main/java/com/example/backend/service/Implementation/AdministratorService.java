@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Implementation;
 
 import com.example.backend.config.EmailConfig;
 import com.example.backend.config.ModelMapperConfig;
@@ -9,13 +9,14 @@ import com.example.backend.exceptions.AdministratorNotFoundException;
 import com.example.backend.model.Administrator;
 import com.example.backend.repository.IAdministratorRepository;
 import com.example.backend.repository.IRoleRepository;
+import com.example.backend.service.Interface.IAdministratorService;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class AdministratorService extends EmployeeService<AdministratorDTOResponse, AdministratorDTORequest,
-        Administrator, IAdministratorRepository, AdministratorNotFoundException> implements IAdministratorService{
-    
+        Administrator, IAdministratorRepository, AdministratorNotFoundException> implements IAdministratorService {
+
     public AdministratorService(IAdministratorRepository userRepository, ModelMapperConfig mapper, IRoleRepository roleRepository, PasswordEncoderConfig passwordEncoderConfig, EmailConfig emailConfig) {
         super(userRepository, mapper, roleRepository, passwordEncoderConfig, emailConfig);
     }
@@ -33,6 +34,11 @@ public class AdministratorService extends EmployeeService<AdministratorDTORespon
     @Override
     protected AdministratorNotFoundException createNotFoundException(String message) {
         return new AdministratorNotFoundException(message);
+    }
+
+    @Override
+    protected String getAllMessage() {
+        return "Los administradores fueron encontrados con exito";
     }
 
 }

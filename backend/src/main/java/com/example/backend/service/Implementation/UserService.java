@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Implementation;
 
 import com.example.backend.config.EmailConfig;
 import com.example.backend.config.ModelMapperConfig;
@@ -8,21 +8,14 @@ import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.dto.response.UserDtoResponse;
 import com.example.backend.exceptions.*;
 
-import com.example.backend.model.Role;
-import com.example.backend.model.RoleEnum;
 import com.example.backend.model.User;;
 import com.example.backend.repository.IRoleRepository;
 import com.example.backend.repository.IUserRepository;
+import com.example.backend.service.Interface.IUserService;
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.utility.RandomString;
 
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 // Service for users - CRUD operations
@@ -41,8 +34,8 @@ public abstract class UserService<
             Repository,
             NotFoundException>
         implements IUserService<
-            ResponseDTO,
-            RequestDTO>{
+                    ResponseDTO,
+                    RequestDTO> {
 
     // Some DI
     private final IRoleRepository roleRepository;

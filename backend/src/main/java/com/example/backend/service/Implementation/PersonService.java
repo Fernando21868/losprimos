@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Implementation;
 
 import com.example.backend.config.ModelMapperConfig;
 import com.example.backend.dto.request.PersonDTORequest;
@@ -8,7 +8,7 @@ import com.example.backend.exceptions.EmailAlreadExistException;
 import com.example.backend.exceptions.PersonNotFoundException;
 import com.example.backend.model.Person;
 import com.example.backend.repository.IPersonRepository;
-import lombok.Data;
+import com.example.backend.service.Interface.IPersonService;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.Conditions;
@@ -19,7 +19,14 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
-public abstract class PersonService<ResponseDTO extends PersonDTOResponse, RequestDTO extends PersonDTORequest, Model extends Person, Repository extends IPersonRepository<Model>, NotFoundException extends PersonNotFoundException> implements IPersonService<ResponseDTO, RequestDTO> {
+public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
+        RequestDTO extends PersonDTORequest,
+        Model extends Person,
+        Repository extends IPersonRepository<Model>,
+        NotFoundException extends PersonNotFoundException>
+        implements IPersonService<
+        ResponseDTO,
+        RequestDTO> {
 
     // Inject dependencies
     // TODO: VER SI QUEDAN COMO PROTECTED O PRIVATE
@@ -44,6 +51,7 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse, Reque
     protected abstract Class<ResponseDTO> getResponseClass();
     protected abstract Class<Model> getEntityClass();
     protected abstract NotFoundException createNotFoundException(String message);
+    protected abstract String getAllMessage();
 
     /***
      * Service con get all the persons of a specific type
@@ -53,7 +61,7 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse, Reque
     public ResponseSuccessDto<List<ResponseDTO>> getAll() {
         List<Model> persons = personRepository.findAll();
         List<ResponseDTO> personsDtoResponses = persons.stream().map(person -> mapper.modelMapper().map(person, response)).collect(Collectors.toList());
-        return new ResponseSuccessDto<>(personsDtoResponses, 200, "Las personas fueron encontradas con exito", false);
+        return new ResponseSuccessDto<>(personsDtoResponses, 200, getAllMessage(), false);
     }
 
     /***

@@ -1,42 +1,55 @@
 package com.example.backend.dto.request;
 
+import com.example.backend.model.Patient;
+import com.example.backend.model.Person;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @SuperBuilder
 public class PersonDTORequest {
 
-    @NotNull(message = "Por favor introduzca un dni")
-    @Min(value = 0, message = "Introduzca un dni valido")
-    @Min(value = 100_000, message = "Introduzca un dni valido")
-    private Integer dni;
-
-    //@ValidEmail(message = "Por favor introduzca un email valido")
-    @Email(message = "Por favor introduzca un email valido")
-    @NotNull(message = "Por favor introduzca un email")
-    @NotBlank(message = "Por favor introduzca un email")
-    private String email;
-
-    @NotBlank(message = "Por favor introduzca nombre")
+    // not nullables
+    @NotBlank(message = "Por favor introduzca un nombre")
     @Size(max = 30, message = "El nombre no debe contener mas de 30 caracteres")
     private String firstName;
-
-    @NotBlank(message = "Por favor introduzca apellido ")
+    @NotBlank(message = "Por favor introduzca un apellido ")
     @Size(max = 30, message = "El apellido no debe contener mas de 30 caracteres")
     private String lastName;
-
-    @Size(max = 30, message = "El telefono no debe contener mas de 30 caracteres")
-    private String phoneNumber;
-
+    @NotBlank(message = "Por favor introduzca un dni")
+    @Size(max = 9, message = "El dni no debe contener mas de 9 caracteres")
+    private Integer dni;
+    @NotNull(message = "Por favor introduzca una fecha de nacimiento")
     @PastOrPresent(message = "La fecha de nacimiento debe ser anterior a la actual")
     private Date birthday;
+    @NotBlank(message = "Por favor introduzca una nacionalidad")
+    @Size(max = 30, message = "La nacionalidad no debe contener mas de 30 caracteres")
+    private String nationality;
+    @NotBlank(message = "Por favor introduzca una edad")
+    @Size(max = 4, message = "La edad no debe contener mas de 4 caracteres")
+    private String age;
+    @NotBlank(message = "Por favor introduzca un sexo")
+    @Size(max = 10, message = "El sexo no debe contener mas de 10 caracteres")
+    private String sex;
 
-    private AddressDtoRequest address;
+    // nullables
+    @Size(max = 30, message = "El telefono no debe contener mas de 30 caracteres")
+    private String phoneNumber;
+    //@ValidEmail(message = "Por favor introduzca un email valido")
+    @Email(message = "Por favor introduzca un email valido")
+    private String email;
+    @Size(max = 30, message = "La obra social no debe contener mas de 30 caracteres")
+    private String socialWork;
+
+    // relations
+    private AddressDtoRequest addressDtoRequest;
+    private Set<PersonDTORequest> personDTORequests;
 
 }

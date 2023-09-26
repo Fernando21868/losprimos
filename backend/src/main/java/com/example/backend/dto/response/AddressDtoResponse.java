@@ -13,13 +13,14 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDtoResponse {
+    // not nullables
+    private String address;
 
-    private Long id;
+    // nullables
     private String province;
     private String department;
     private String municipality;
     private Double latitude;
     private Double longitude;
-    private String address;
 
 }

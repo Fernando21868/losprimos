@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Implementation;
 
 import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
@@ -6,6 +6,7 @@ import com.example.backend.dto.response.UserAuthenticateDtoResponse;
 import com.example.backend.exceptions.UserNotFoundException;
 import com.example.backend.model.User;
 import com.example.backend.repository.IUserRepository;
+import com.example.backend.service.Interface.ISessionService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

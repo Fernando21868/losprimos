@@ -1,22 +1,16 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.request.AdministratorDTORequest;
 import com.example.backend.dto.request.EmployeeDtoRequest;
-import com.example.backend.dto.response.AdministratorDTOResponse;
 import com.example.backend.dto.response.EmployeeDtoResponse;
 import com.example.backend.dto.response.ResponseSuccessDto;
 import com.example.backend.exceptions.EmployeeNotFoundException;
 import com.example.backend.model.Employee;
 import com.example.backend.repository.IEmployeeRepository;
-import com.example.backend.service.AdministratorService;
-import com.example.backend.service.EmployeeService;
-import com.example.backend.service.IAdministratorService;
-import com.example.backend.service.IEmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.service.Implementation.EmployeeService;
+import com.example.backend.service.Interface.IEmployeeService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;

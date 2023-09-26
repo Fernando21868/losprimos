@@ -2,8 +2,8 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
 import com.example.backend.dto.response.UserAuthenticateDtoResponse;
-import com.example.backend.service.ISessionService;
-import com.example.backend.service.SessionServiceImpl;
+import com.example.backend.service.Interface.ISessionService;
+import com.example.backend.service.Implementation.SessionServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

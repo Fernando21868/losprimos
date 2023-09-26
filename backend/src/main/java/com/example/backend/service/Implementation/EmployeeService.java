@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Implementation;
 
 import com.example.backend.config.EmailConfig;
 import com.example.backend.config.ModelMapperConfig;
@@ -14,6 +14,7 @@ import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
 import com.example.backend.repository.IRoleRepository;
 import com.example.backend.repository.IEmployeeRepository;
+import com.example.backend.service.Interface.IEmployeeService;
 import net.bytebuddy.utility.RandomString;
 
 import javax.mail.MessagingException;
@@ -35,7 +36,7 @@ public abstract class EmployeeService<
             Repository,
             NotFoundException>
         implements IEmployeeService<
-            ResponseDTO, RequestDTO> {
+                    ResponseDTO, RequestDTO> {
     public EmployeeService(Repository userRepository, ModelMapperConfig mapper, IRoleRepository roleRepository, PasswordEncoderConfig passwordEncoderConfig, EmailConfig emailConfig) {
         super(userRepository, mapper, roleRepository, passwordEncoderConfig, emailConfig);
     }

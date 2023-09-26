@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Interface;
 import com.example.backend.exceptions.UserNotFoundException;
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
 import com.example.backend.dto.response.UserAuthenticateDtoResponse;

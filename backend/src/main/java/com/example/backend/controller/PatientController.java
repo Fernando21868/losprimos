@@ -1,8 +1,8 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.request.PatientDTORequest;
-import com.example.backend.service.IPatientService;
-import com.example.backend.service.PatientService;
+import com.example.backend.service.Interface.IPatientService;
+import com.example.backend.service.Implementation.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

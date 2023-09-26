@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Interface;
 
 import com.example.backend.dto.request.AdministratorDTORequest;
 import com.example.backend.dto.response.AdministratorDTOResponse;
