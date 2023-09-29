@@ -22,10 +22,11 @@ public class EmailConfig {
      * Method to send an email and a link to verify the registered account of a client
      * @param user data of a client that was registered
      * @param siteURL URL to create a link to send to the email of a client
+     * @param verificationEndpointEmployee endpoint to verification email
      * @throws MessagingException exception
      * @throws UnsupportedEncodingException exception
      */
-    public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+    public void sendVerificationEmail(User user, String siteURL, String verificationEndpointEmployee) throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = "elderarias2015@gmail.com";
         String senderName = "losprimos";
@@ -44,7 +45,7 @@ public class EmailConfig {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFirstName());
-        String verifyURL = siteURL + "/api/v1/clients/verifyRegisteredAccount?code=" + user.getVerificationCode();
+        String verifyURL = siteURL + "/api/v1/"+ verificationEndpointEmployee +"/verifyRegisteredAccount?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 

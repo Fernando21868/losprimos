@@ -21,6 +21,11 @@ public class NurseService extends EmployeeService<NurseDTOResponse, NurseDTORequ
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "nurses";
+    }
+
+    @Override
     protected Class<NurseDTOResponse> getResponseClass() {
         return NurseDTOResponse.class;
     }

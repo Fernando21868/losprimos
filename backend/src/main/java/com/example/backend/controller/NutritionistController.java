@@ -23,4 +23,5 @@ public class NutritionistController extends EmployeeController<
     public NutritionistController(NutritionistService service) {
         super(service);
     }
+
 }

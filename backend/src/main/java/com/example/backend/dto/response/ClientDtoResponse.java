@@ -6,7 +6,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class ClientDtoResponse extends UserDtoResponse {

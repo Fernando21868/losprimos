@@ -22,6 +22,11 @@ public class SocialWorkerService extends EmployeeService<SocialWorkerDTOResponse
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "socialWorkers";
+    }
+
+    @Override
     protected Class<SocialWorkerDTOResponse> getResponseClass() {
         return SocialWorkerDTOResponse.class;
     }

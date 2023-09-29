@@ -5,9 +5,7 @@ import com.example.backend.annotation.ValidEmail;
 import com.example.backend.annotation.ValidPassword;
 import com.example.backend.model.Address;
 import com.example.backend.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.*;
@@ -15,7 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 @PasswordValueMatch.List({@PasswordValueMatch(field = "password", fieldMatch = "confirmPassword", message = "Las contraseñas no coinciden")})
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class UserDtoRequest extends PersonDTORequest{

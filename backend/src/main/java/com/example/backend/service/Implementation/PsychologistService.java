@@ -22,6 +22,11 @@ public class PsychologistService extends EmployeeService<PsychologistDTOResponse
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "psychologists";
+    }
+
+    @Override
     protected Class<PsychologistDTOResponse> getResponseClass() {
         return PsychologistDTOResponse.class;
     }

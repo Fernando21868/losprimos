@@ -3,7 +3,6 @@ import LayoutClient from "../layoutClient/LayoutClient";
 import Login from "../../pages/login/Login";
 import Register from "../../pages/register/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "../../pages/home/Home";
 import ConfirmationEmail from "../../pages/confirmationEmail/ConfirmationEmail";
 import AccountVerified from "../../pages/accountVerified/AccountVerified";
 import { LayoutAdmin } from "../layoutAdmin/LayoutAdmin";
@@ -15,10 +14,8 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route element={<AuthMe></AuthMe>}>
-          <Route path="/" element={<LayoutClient></LayoutClient>}>
-            <Route index element={<Home></Home>}></Route>
-            <Route path="login" element={<Login></Login>}></Route>
-            <Route path="register" element={<Register></Register>}></Route>
+          <Route path="/">
+            <Route path="login" index element={<Login></Login>}></Route>
             <Route
               path="confirmationEmail"
               element={<ConfirmationEmail></ConfirmationEmail>}

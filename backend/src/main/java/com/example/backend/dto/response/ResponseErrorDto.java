@@ -3,7 +3,8 @@ package com.example.backend.dto.response;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ResponseErrorDto extends ResponseDto {
 

@@ -37,9 +37,18 @@ public abstract class EmployeeService<
             NotFoundException>
         implements IEmployeeService<
                     ResponseDTO, RequestDTO> {
+
+    private String verificationEndpointEmployee = getVerificationEndpointEmployee();
+
     public EmployeeService(Repository userRepository, ModelMapperConfig mapper, IRoleRepository roleRepository, PasswordEncoderConfig passwordEncoderConfig, EmailConfig emailConfig) {
         super(userRepository, mapper, roleRepository, passwordEncoderConfig, emailConfig);
     }
+
+    /**
+     * Method to return a verification endpoint String
+     * @return the verification endpoint of the implementations controllers
+     */
+    protected abstract String getVerificationEndpointEmployee();
 
     /***
      * Service implementation to register an employee of a specific type
@@ -77,7 +86,7 @@ public abstract class EmployeeService<
         Model employeePersist = super.getPersonRepository().save(employee);
         ResponseDTO employeeDtoResponse = super.getMapper().modelMapper().map(employeePersist,
                 super.getResponse());
-        super.getEmailConfig().sendVerificationEmail(employee, siteURL);
+        super.getEmailConfig().sendVerificationEmail(employee, siteURL, verificationEndpointEmployee);
         return new ResponseSuccessDto<>(employeeDtoResponse, 201, "El empleado se creó con éxito", false);
     }
 

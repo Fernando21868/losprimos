@@ -23,6 +23,11 @@ public class DoctorService extends EmployeeService<DoctorDTOResponse, DoctorDTOR
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "doctors";
+    }
+
+    @Override
     protected Class<DoctorDTOResponse> getResponseClass() {
         return DoctorDTOResponse.class;
     }

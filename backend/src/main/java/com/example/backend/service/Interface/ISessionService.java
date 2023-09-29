@@ -1,4 +1,6 @@
 package com.example.backend.service.Interface;
+import com.example.backend.dto.response.EmployeeDtoResponse;
+import com.example.backend.dto.response.UserDtoResponse;
 import com.example.backend.exceptions.UserNotFoundException;
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
 import com.example.backend.dto.response.UserAuthenticateDtoResponse;
@@ -13,4 +15,5 @@ public interface ISessionService {
      * @throws UserNotFoundException -- se lanza la exception en caso de no encontrar al usuario
      */
     UserAuthenticateDtoResponse login(UserAuthenticateDtoRequest user );
+    UserDtoResponse getByUsername(String username);
 }

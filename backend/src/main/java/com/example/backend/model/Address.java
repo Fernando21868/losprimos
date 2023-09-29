@@ -1,28 +1,36 @@
 package com.example.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+/**
+ * Entity Address
+ */
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "address")
 public class Address {
 
+    /**
+     * id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // not nullables
-    @Column(name = "address", nullable = false)
+    /**
+     * not nullables
+     */
+    @Column(name = "address")
     private String address;
 
-    // nullables
+    /**
+     * nullables
+     */
     @Column(name = "province")
     private String province;
     @Column(name = "department")
@@ -34,7 +42,9 @@ public class Address {
     @Column(name = "longitude")
     private Double longitude;
 
-    // relations
+    /**
+     * relations
+     */
     @OneToOne(mappedBy = "address")
     private Person person;
 

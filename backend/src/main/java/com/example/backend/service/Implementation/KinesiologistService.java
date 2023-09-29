@@ -22,6 +22,11 @@ public class KinesiologistService extends EmployeeService<KinesiologistDTORespon
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "kinesiologists";
+    }
+
+    @Override
     protected Class<KinesiologistDTOResponse> getResponseClass() {
         return KinesiologistDTOResponse.class;
     }

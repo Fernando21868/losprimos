@@ -23,4 +23,5 @@ public class SocialWorkerController extends EmployeeController<
     public SocialWorkerController(SocialWorkerService service) {
         super(service);
     }
+
 }

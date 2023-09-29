@@ -18,13 +18,13 @@ public class PatientDTORequest extends PersonDTORequest{
 
     // nullables
     @Size(max = 15, message = "La cedula de identidad no contener mas de 15 caracteres")
-    private Integer identityCard;
+    private String identityCard;
     @Size(max = 15, message = "La libreta de enrolamiento no debe contener mas de 15 caracteres")
-    private Integer bookEnlistment;
+    private String bookEnlistment;
     @Size(max = 15, message = "La libreta civica no debe contener mas de 15 caracteres")
-    private Integer bookCivic;
+    private String bookCivic;
 
     // relations
-    private ClinicHistoryDTORequest clinicHistoryDTORequest;
+    private ClinicHistoryDTORequest clinicHistory;
 
 }

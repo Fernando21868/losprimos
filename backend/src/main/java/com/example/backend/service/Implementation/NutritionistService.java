@@ -22,6 +22,11 @@ public class NutritionistService extends EmployeeService<NutritionistDTOResponse
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "nutritionists";
+    }
+
+    @Override
     protected Class<NutritionistDTOResponse> getResponseClass() {
         return NutritionistDTOResponse.class;
     }

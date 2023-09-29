@@ -3,13 +3,16 @@ package com.example.backend.dto.response;
 import com.example.backend.dto.request.ClinicHistoryDTORequest;
 import com.example.backend.dto.request.PersonDTORequest;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class PatientDTOResponse extends PersonDTOResponse{
@@ -20,6 +23,6 @@ public class PatientDTOResponse extends PersonDTOResponse{
     private Integer bookCivic;
 
     // relations
-    private ClinicHistoryDTOResponse clinicHistoryDTOResponse;
+    private ClinicHistoryDTOResponse clinicHistory;
 
 }

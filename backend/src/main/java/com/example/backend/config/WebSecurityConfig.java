@@ -9,14 +9,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration of end-points
+ */
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     /**
-     * Configuración para excluir end-points
-     *
-     * @param http
-     * @throws Exception
+     * Configuration to exclude end-points
+     * @param http default parameter
+     * @throws Exception and exception
      */
     @Override
     protected void configure ( HttpSecurity http ) throws Exception {
@@ -25,21 +28,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/v1/clients/register")
+                .antMatchers(HttpMethod.GET, "/api/v1/**/verifyRegisteredAccount")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/clients/profile/**")
+                .antMatchers(HttpMethod.POST, "/api/v1/administrators/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/clients/verifyRegisteredAccount")
-                .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/clients/socialWorkers/**")
-                .permitAll()
-                //.antMatchers(
-                //        "/api/v1/employees/**",
-                //        "/api/v1/clients/**"
-                //).hasAnyAuthority("ADMIN")//
-                //.antMatchers(
-                //        "/api/v1/clients/**"
-                //).hasAnyAuthority("EMPLOYEE", "ADMIN")
+                .antMatchers(
+                        "/api/v1/employees/**",
+                        "/api/v1/administrators/**",
+                        "/api/v1/doctors/**",
+                        "/api/v1/kinesiologists/**",
+                        "/api/v1/nurses/**",
+                        "/api/v1/nutritionists/**",
+                        "/api/v1/psychologists/**"
+                ).hasAnyAuthority("ADMIN")//
+                .antMatchers(
+                        "/api/v1/patients/**"
+                ).hasAnyAuthority("EMPLOYEE", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/sign-in")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/ping")
@@ -54,10 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Configuración para excluir paginas
+     * Configuration to exclude pages
      *
-     * @param web
-     * @throws Exception
+     * @param web default parameter
+     * @throws Exception an exception
      */
     @Override
     public void configure ( WebSecurity web ) throws Exception {

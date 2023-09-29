@@ -2,14 +2,17 @@ package com.example.backend.dto.response;
 
 import com.example.backend.dto.request.PersonDTORequest;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class PersonDTOResponse {
@@ -28,7 +31,7 @@ public class PersonDTOResponse {
     private String email;
     private String socialWork;
 
-    private AddressDtoResponse addressDtoResponse;
-    private Set<PersonDTOResponse> personDTOResponses;
+    private AddressDtoResponse address;
+    private Set<PersonDTOResponse> persons;
 
 }

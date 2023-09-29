@@ -2,17 +2,17 @@ package com.example.backend.dto.response;
 
 import com.example.backend.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.OneToOne;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDtoResponse {
+
     // not nullables
     private String address;
 

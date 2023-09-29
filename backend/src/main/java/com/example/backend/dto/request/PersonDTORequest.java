@@ -3,7 +3,9 @@ package com.example.backend.dto.request;
 import com.example.backend.model.Patient;
 import com.example.backend.model.Person;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
@@ -11,7 +13,8 @@ import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class PersonDTORequest {
@@ -23,19 +26,19 @@ public class PersonDTORequest {
     @NotBlank(message = "Por favor introduzca un apellido ")
     @Size(max = 30, message = "El apellido no debe contener mas de 30 caracteres")
     private String lastName;
-    @NotBlank(message = "Por favor introduzca un dni")
+    // @NotBlank(message = "Por favor introduzca un dni")
     @Size(max = 9, message = "El dni no debe contener mas de 9 caracteres")
-    private Integer dni;
-    @NotNull(message = "Por favor introduzca una fecha de nacimiento")
+    private String dni;
+    // @NotNull(message = "Por favor introduzca una fecha de nacimiento")
     @PastOrPresent(message = "La fecha de nacimiento debe ser anterior a la actual")
     private Date birthday;
-    @NotBlank(message = "Por favor introduzca una nacionalidad")
+    // @NotBlank(message = "Por favor introduzca una nacionalidad")
     @Size(max = 30, message = "La nacionalidad no debe contener mas de 30 caracteres")
     private String nationality;
-    @NotBlank(message = "Por favor introduzca una edad")
+    // @NotBlank(message = "Por favor introduzca una edad")
     @Size(max = 4, message = "La edad no debe contener mas de 4 caracteres")
     private String age;
-    @NotBlank(message = "Por favor introduzca un sexo")
+    // @NotBlank(message = "Por favor introduzca un sexo")
     @Size(max = 10, message = "El sexo no debe contener mas de 10 caracteres")
     private String sex;
 
@@ -49,7 +52,7 @@ public class PersonDTORequest {
     private String socialWork;
 
     // relations
-    private AddressDtoRequest addressDtoRequest;
-    private Set<PersonDTORequest> personDTORequests;
+    private AddressDtoRequest address;
+    private Set<PersonDTORequest> persons;
 
 }

@@ -23,4 +23,5 @@ public class KinesiologistController extends EmployeeController<
     public KinesiologistController(KinesiologistService service) {
         super(service);
     }
+
 }

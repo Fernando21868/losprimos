@@ -7,7 +7,8 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SuperBuilder
 public class EmployeeDtoResponse extends UserDtoResponse {

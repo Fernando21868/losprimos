@@ -23,4 +23,5 @@ public class NurseController extends EmployeeController<
     public NurseController(NurseService service) {
         super(service);
     }
+
 }

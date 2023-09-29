@@ -8,6 +8,8 @@ import com.example.backend.model.Employee;
 import com.example.backend.repository.IEmployeeRepository;
 import com.example.backend.service.Implementation.EmployeeService;
 import com.example.backend.service.Interface.IEmployeeService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
+@Getter
+@Setter
 public abstract class EmployeeController<
         ResponseDTO extends EmployeeDtoResponse,
         RequestDTO extends EmployeeDtoRequest,
@@ -80,12 +84,6 @@ public abstract class EmployeeController<
             return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
         }
         return new ResponseEntity<>(responseSuccessDto, HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("/profile/{username}")
-    @CrossOrigin(origins = "http://localhost:5173")
-    public ResponseEntity<?> getByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(service.getByUsername(username), HttpStatus.OK);
     }
 
 }

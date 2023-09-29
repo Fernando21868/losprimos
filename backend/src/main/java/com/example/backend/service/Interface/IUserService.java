@@ -10,7 +10,6 @@ import java.io.UnsupportedEncodingException;
 
 public interface IUserService<Response extends UserDtoResponse, Request extends UserDtoRequest> extends IPersonService<Response,
         Request>{
-    Response getByUsername(String username);
     ResponseSuccessDto<Response> verifyRegisteredAccount(String verificationCode);
     ResponseSuccessDto<Response> register(Request employeeDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException;
 

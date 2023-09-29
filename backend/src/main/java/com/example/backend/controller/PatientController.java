@@ -43,33 +43,4 @@ public class PatientController {
         return new ResponseEntity<>(patientService.delete(id), HttpStatus.OK);
     }
 
-    //@PostMapping("/register")
-    //public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDtoRequest clientDtoRequest,
-                                             //HttpServletRequest request) throws UnsupportedEncodingException,
-    // MessagingException {
-    //    return new ResponseEntity<>(patientService.register(clientDtoRequest, getSiteURL(request)), HttpStatus.OK);
-    //}
-//
-    //private String getSiteURL(HttpServletRequest request) {
-    //    String siteURL = request.getRequestURL().toString();
-    //    return siteURL.replace(request.getServletPath(), "");
-    //}
-//
-    //@GetMapping("/verifyRegisteredAccount")
-    //public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
-    //    ResponseSuccessDto<ClientDtoResponse> responseSuccessDto = patientService.verifyRegisteredAccount(code);
-    //    if(!responseSuccessDto.getError()){
-    //        String clientConfirmationPage = "http://localhost:5173/accountVerified";
-    //        HttpHeaders headers = new HttpHeaders();
-    //        headers.add("Location", clientConfirmationPage);
-    //        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
-    //    }
-    //    return new ResponseEntity<>(responseSuccessDto, HttpStatus.BAD_REQUEST);
-    //}
-//
-    //@GetMapping("/profile/{username}")
-    //public ResponseEntity<?> getClientByUsername(@PathVariable String username) {
-    //    return new ResponseEntity<>(patientService.getByUsername(username), HttpStatus.OK);
-    //}
-
 }

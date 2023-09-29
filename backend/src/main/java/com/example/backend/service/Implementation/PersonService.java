@@ -15,8 +15,17 @@ import org.modelmapper.Conditions;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service of Persons
+ * @param <ResponseDTO>
+ * @param <RequestDTO>
+ * @param <Model>
+ * @param <Repository>
+ * @param <NotFoundException>
+ */
 @Setter
 @Getter
 public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
@@ -28,7 +37,9 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
         ResponseDTO,
         RequestDTO> {
 
-    // Inject dependencies
+    /**
+     * Dependencies
+     */
     // TODO: VER SI QUEDAN COMO PROTECTED O PRIVATE
     private final Repository personRepository;
     private final ModelMapperConfig mapper;
@@ -36,9 +47,13 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
     private final Class<Model> model;
 
 
-    // Constructor for dependencies
-    public PersonService(Repository userRepository, ModelMapperConfig mapper) {
-        this.personRepository = userRepository;
+    /**
+     * Constructor for dependencies
+     * @param personRepository repository of users
+     * @param mapper mapper to use in objects
+     */
+    public PersonService(Repository personRepository, ModelMapperConfig mapper) {
+        this.personRepository = personRepository;
         this.mapper = mapper;
         this.response = getResponseClass();
         this.model = getEntityClass();
@@ -86,13 +101,35 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
      */
     @Override
     public ResponseSuccessDto<ResponseDTO> create(RequestDTO personDtoRequest) {
-        if(emailExists(personDtoRequest.getEmail())){
-            throw new EmailAlreadExistException("Actualmente ya existe una persona con el email: " + personDtoRequest.getEmail());
-        }
+        verifyExistenceOfEmail(personDtoRequest);
         Model person = mapper.modelMapper().map(personDtoRequest, model);
+        if(person.getPersons() != null){
+            Set<Person> referents = person.getPersons();
+            referents.forEach(singleReferent -> {
+                singleReferent.setPerson(person);
+                singleReferent.getAddress().setPerson(singleReferent);
+            });
+        }
         Model personPersist = personRepository.save(person);
         ResponseDTO personDtoResponse = mapper.modelMapper().map(personPersist, response);
         return new ResponseSuccessDto<>(personDtoResponse, 201, "La persona fue creada con exito", false);
+    }
+
+    /**
+     * Verify if an email already exists in the database
+     * @param personDtoRequest data to create a person
+     */
+    public void verifyExistenceOfEmail(RequestDTO personDtoRequest){
+        if(emailExists(personDtoRequest.getEmail())){
+            throw new EmailAlreadExistException("Actualmente ya existe una persona con el email: " + personDtoRequest.getEmail());
+        }
+        if(personDtoRequest.getPersons() !=null && !personDtoRequest.getPersons().isEmpty()){
+            for (PersonDTORequest person: personDtoRequest.getPersons()){
+                if(emailExists(person.getEmail())){
+                    throw new EmailAlreadExistException("Actualmente ya existe una persona con el email: " + person.getEmail());
+                }
+            }
+        }
     }
 
     /***
@@ -103,9 +140,7 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
      */
     @Override
     public ResponseSuccessDto<ResponseDTO> update(Long id, RequestDTO personDtoRequest) {
-        if (emailExists(personDtoRequest.getEmail())) {
-            throw new EmailAlreadExistException("Actualmente ya existe una persona con el email: " + personDtoRequest.getEmail());
-        }
+        verifyExistenceOfEmail(personDtoRequest);
         Optional<Model> person = personRepository.findById(id);
         if(person.isPresent()){
             Model personExisting = person.get();
@@ -139,7 +174,7 @@ public abstract class PersonService<ResponseDTO extends PersonDTOResponse,
      * @return true or false
      */
     protected boolean emailExists(String email){
-        return personRepository.findByEmail(email).isPresent();
+        return personRepository.findByEmailAndEmailIsNotNull(email).isPresent();
     }
 
 }

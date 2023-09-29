@@ -23,4 +23,5 @@ public class PsychologistController extends EmployeeController<
     public PsychologistController(PsychologistService service) {
         super(service);
     }
+
 }

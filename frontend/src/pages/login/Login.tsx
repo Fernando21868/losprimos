@@ -58,22 +58,22 @@ function Login() {
         ),
       });
     } else {
-      window.location.reload();
+      navigate("/admin");
     }
   }
-
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-    }
-  });
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }
 
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/admin");
+    }
+  }, [userInfo]);
+
   return (
-    <div className="p-4 flex flex-col items-center justify-center">
+    <div className="p-4 flex flex-col items-center justify-center h-screen w-screen">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

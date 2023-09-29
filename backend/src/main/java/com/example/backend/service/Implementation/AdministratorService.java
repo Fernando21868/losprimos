@@ -22,6 +22,11 @@ public class AdministratorService extends EmployeeService<AdministratorDTORespon
     }
 
     @Override
+    protected String getVerificationEndpointEmployee() {
+        return "administrators";
+    }
+
+    @Override
     protected Class<AdministratorDTOResponse> getResponseClass() {
         return AdministratorDTOResponse.class;
     }
