@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 /**
- * Entity Patient
+ * Entity for patient
  */
 @Getter
 @Setter

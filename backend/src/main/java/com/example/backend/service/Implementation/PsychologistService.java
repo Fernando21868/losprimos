@@ -37,8 +37,8 @@ public class PsychologistService extends EmployeeService<PsychologistDTOResponse
     }
 
     @Override
-    protected PsychologistNotFoundException createNotFoundException(String message) {
-        return new PsychologistNotFoundException(message);
+    protected PsychologistNotFoundException notFoundException() {
+        return new PsychologistNotFoundException("No se encontro un psicologo con el id especificado");
     }
 
     @Override

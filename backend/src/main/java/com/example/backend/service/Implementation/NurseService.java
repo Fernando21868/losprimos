@@ -36,8 +36,8 @@ public class NurseService extends EmployeeService<NurseDTOResponse, NurseDTORequ
     }
 
     @Override
-    protected NurseNotFoundException createNotFoundException(String message) {
-        return new NurseNotFoundException(message);
+    protected NurseNotFoundException notFoundException() {
+        return new NurseNotFoundException("No se encontro un enfermero con el id especificado");
     }
 
     @Override

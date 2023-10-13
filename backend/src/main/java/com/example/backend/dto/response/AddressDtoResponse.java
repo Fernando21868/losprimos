@@ -1,22 +1,31 @@
 package com.example.backend.dto.response;
 
-import com.example.backend.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import javax.persistence.OneToOne;
+import java.io.Serializable;
 
+/**
+ * Response dto for address
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDtoResponse {
+public class AddressDtoResponse implements Serializable {
 
-    // not nullables
+    /**
+     * Id
+     */
+    private Long id;
+
+    /**
+     * Not nullables
+     */
     private String address;
 
-    // nullables
+    /**
+     * Nullables
+     */
     private String province;
     private String department;
     private String municipality;

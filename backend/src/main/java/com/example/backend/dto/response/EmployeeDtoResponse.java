@@ -1,16 +1,29 @@
 package com.example.backend.dto.response;
 
-import com.example.backend.model.Role;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-import java.util.List;
+import java.io.Serializable;
 
+
+/**
+ * Response DTO for employee
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class EmployeeDtoResponse extends UserDtoResponse {
+public class EmployeeDtoResponse extends UserDtoResponse implements Serializable {
+
+    /**
+     * Id
+     */
+    private Long id;
+
+    /**
+     * Not nullables
+     */
+    private String enrollment;
+    private String type;
 
 }

@@ -2,12 +2,13 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.request.UserAuthenticateDtoRequest;
 import com.example.backend.dto.response.UserAuthenticateDtoResponse;
-import com.example.backend.model.User;
 import com.example.backend.service.Interface.ISessionService;
 import com.example.backend.service.Implementation.SessionServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,7 +27,7 @@ public class SessionController {
      * @return UserResponseDTO
      */
     @PostMapping("/sign-in")
-    public UserAuthenticateDtoResponse login(@RequestBody UserAuthenticateDtoRequest user ) {
+    public UserAuthenticateDtoResponse login(@Valid @RequestBody UserAuthenticateDtoRequest user ) {
         return service.login(user);
     }
 

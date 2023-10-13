@@ -1,7 +1,8 @@
 package com.example.backend.exceptions;
 
-public class PersonNotFoundException extends RuntimeException {
+public class PersonNotFoundException extends NotFoundException {
     public PersonNotFoundException(String message){
         super(message);
     }
+
 }

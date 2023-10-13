@@ -45,18 +45,6 @@ export function useAddress() {
     }
   };
 
-  // const getmunicipalities = async (id: string) => {
-  //   try {
-  //     setLoading(true);
-  //     const resultado = await getDepartmentsAPI(id);
-  //     setLoading(false);
-  //     return resultado;
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     setError(error);
-  //   }
-  // };
-
   return {
     loading,
     error,

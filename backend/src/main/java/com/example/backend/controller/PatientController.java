@@ -34,8 +34,8 @@ public class PatientController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable Long id, @Valid @RequestBody PatientDTORequest patientDTORequest) {
-        return new ResponseEntity<>(patientService.update(id, patientDTORequest), HttpStatus.OK);
+    public ResponseEntity<?> updateClient(@Valid @RequestBody PatientDTORequest patientDTORequest) {
+        return new ResponseEntity<>(patientService.update(patientDTORequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

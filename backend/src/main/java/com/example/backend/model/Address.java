@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 /**
- * Entity Address
+ * Entity for address
  */
 @Getter
 @Setter

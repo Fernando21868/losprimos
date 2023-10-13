@@ -37,8 +37,8 @@ public class KinesiologistService extends EmployeeService<KinesiologistDTORespon
     }
 
     @Override
-    protected KinesiologistNotFoundException createNotFoundException(String message) {
-        return new KinesiologistNotFoundException(message);
+    protected KinesiologistNotFoundException notFoundException() {
+        return new KinesiologistNotFoundException("No se encontro un kinesiologo con el id especificado");
     }
 
     @Override

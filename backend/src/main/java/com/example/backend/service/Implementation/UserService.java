@@ -14,6 +14,8 @@ import com.example.backend.repository.IUserRepository;
 import com.example.backend.service.Interface.IUserService;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
@@ -45,8 +47,9 @@ public abstract class UserService<
                     RequestDTO> {
 
     /**
-     * Some DI
+     * Some di and variables
      */
+    private static Logger logger = Logger.getLogger(UserService.class);
     private final IRoleRepository roleRepository;
     private final PasswordEncoderConfig passwordEncoderConfig;
     private final EmailConfig emailConfig;
@@ -73,17 +76,28 @@ public abstract class UserService<
      */
     @Override
     public ResponseSuccessDto<ResponseDTO> verifyRegisteredAccount(String verificationCode) {
-        Optional<Model> user = super.getPersonRepository().findByVerificationCode(verificationCode);
-        if(user.isPresent()){
+        try {
+            logger.info("Service to confirm an account by a token");
+            Optional<Model> user = super.getPersonRepository().findByVerificationCodeAndVerificationCodeIsNotNull(verificationCode);
+            if(user.isEmpty()){
+                logger.error("The token: " + verificationCode + " doesn't exist");
+                throw new VerificationCodeNotFoundException("La verificacion de la cuenta no tuvo exito, el codigo no existe");
+            }
             Model userPersist = user.get();
             userPersist.setVerificationCode(null);
             userPersist.setEnabled(true);
             super.getPersonRepository().save(userPersist);
             ResponseDTO userDtoResponse = super.getMapper().modelMapper().map(userPersist, super.getResponse());
-            return new ResponseSuccessDto<>(userDtoResponse, 201, "El usuario fue creado con exito", false);
+            return new ResponseSuccessDto<>(userDtoResponse, HttpStatus.CREATED.value(), "El usuario fue creado con exito",
+                    false);
+        } catch (Exception exception) {
+            logger.error("Something wrong occur while trying to verify the account");
+            throw new InternalException(exception.getMessage());
         }
-        throw createNotFoundException("La verificacion de la cuenta no tuvo exito, el codigo no existe");
     }
+
+    // TODO: IF SOME REQUIREMENT CHANGE ABOUT ADDING A NEW TYPE OF USER WE CAN CREATE IT HERE AND USE usernameExists
+    //  () TO VERIFY IF THE USERNAME ALREADY EXISTS
 
     /***
      * Method to verify if a username already exists in the DB

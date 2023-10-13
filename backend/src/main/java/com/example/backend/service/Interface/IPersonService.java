@@ -11,7 +11,7 @@ public interface IPersonService<Response extends PersonDTOResponse, Request exte
     ResponseSuccessDto<List<Response>> getAll();
     ResponseSuccessDto<Response> getById(Long id);
     ResponseSuccessDto<Response> create(Request request);
-    ResponseSuccessDto<Response> update(Long id, Request userDtoRequest);
+    ResponseSuccessDto<Response> update(Request userDtoRequest);
     ResponseSuccessDto<Response> delete(Long id);
 
 }

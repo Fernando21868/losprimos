@@ -1,31 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { TUserAuth, TUserRegister } from "../types/types";
+import { TUserAuth } from "../types/types";
 import axios from "axios";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store/store";
 
 const backendURL = "http://localhost:8080";
 
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async (client: TUserRegister, { rejectWithValue }) => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      await axios.post(`${backendURL}/api/v1/clients/register`, client, config);
-    } catch (error: any) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
-
+/**
+ * Function to login
+ * @date 10/10/2023 - 1:03:15 AM
+ *
+ * @type {*}
+ */
 export const userLogin = createAsyncThunk(
   "auth/login",
   async ({ username, password }: TUserAuth, { rejectWithValue }) => {
@@ -42,7 +28,6 @@ export const userLogin = createAsyncThunk(
         config
       );
       // store user's token in local storage
-      console.log("tikenn", data);
       localStorage.setItem("userToken", data.token);
       localStorage.setItem("username", data.username);
       return data;
@@ -57,6 +42,13 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+
+/**
+ * Function to authenticate
+ * @date 10/10/2023 - 1:03:25 AM
+ *
+ * @type {*}
+ */
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({

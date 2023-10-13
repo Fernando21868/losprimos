@@ -6,9 +6,10 @@ import com.example.backend.config.PasswordEncoderConfig;
 import com.example.backend.dto.request.EmployeeDtoRequest;
 import com.example.backend.dto.response.EmployeeDtoResponse;
 import com.example.backend.dto.response.ResponseSuccessDto;
+import com.example.backend.exceptions.DniAlreadyExistException;
 import com.example.backend.exceptions.EmailAlreadExistException;
 import com.example.backend.exceptions.EmployeeNotFoundException;
-import com.example.backend.exceptions.UsernameAlreadExistException;
+import com.example.backend.exceptions.UsernameAlreadyExistException;
 import com.example.backend.model.Employee;
 import com.example.backend.model.Role;
 import com.example.backend.model.RoleEnum;
@@ -16,6 +17,7 @@ import com.example.backend.repository.IRoleRepository;
 import com.example.backend.repository.IEmployeeRepository;
 import com.example.backend.service.Interface.IEmployeeService;
 import net.bytebuddy.utility.RandomString;
+import org.apache.log4j.Logger;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -23,6 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service for employee
+ * @param <ResponseDTO> response for employee
+ * @param <RequestDTO> request for employee
+ * @param <Model> entity for employee
+ * @param <Repository> repository for employee
+ * @param <NotFoundException> exception for employee
+ */
 public abstract class EmployeeService<
             ResponseDTO extends EmployeeDtoResponse,
             RequestDTO extends EmployeeDtoRequest,
@@ -38,8 +48,20 @@ public abstract class EmployeeService<
         implements IEmployeeService<
                     ResponseDTO, RequestDTO> {
 
+    /**
+     * Declaring variables and di
+     */
+    private static Logger logger = Logger.getLogger(EmployeeService.class);
     private String verificationEndpointEmployee = getVerificationEndpointEmployee();
 
+    /**
+     *
+     * @param userRepository repostory for employee
+     * @param mapper mapping for objects
+     * @param roleRepository roles for employee
+     * @param passwordEncoderConfig encrypt password
+     * @param emailConfig email config
+     */
     public EmployeeService(Repository userRepository, ModelMapperConfig mapper, IRoleRepository roleRepository, PasswordEncoderConfig passwordEncoderConfig, EmailConfig emailConfig) {
         super(userRepository, mapper, roleRepository, passwordEncoderConfig, emailConfig);
     }
@@ -57,11 +79,15 @@ public abstract class EmployeeService<
      */
     @Override
     public ResponseSuccessDto<ResponseDTO> register(RequestDTO employeeDtoRequest, String siteURL) throws UnsupportedEncodingException, MessagingException{
+        logger.info("Service to register an employee");
         if (emailExists(employeeDtoRequest.getEmail())) {
             throw new EmailAlreadExistException("Actualmente ya existe un empleado con el email: " + employeeDtoRequest.getEmail());
         }
         if (usernameExists(employeeDtoRequest.getUsername())) {
-            throw new UsernameAlreadExistException("Actualmente ya existe un empleado con el username: " + employeeDtoRequest.getUsername());
+            throw new UsernameAlreadyExistException("Actualmente ya existe un empleado con el username: " + employeeDtoRequest.getUsername());
+        }
+        if (dniExists(employeeDtoRequest.getDni())) {
+            throw new DniAlreadyExistException("Actualmente ya existe un empleado con el dni: " + employeeDtoRequest.getDni());
         }
         Model employee = super.getMapper().modelMapper().map(employeeDtoRequest, super.getModel());
         if (employee.getRoles() != null) {

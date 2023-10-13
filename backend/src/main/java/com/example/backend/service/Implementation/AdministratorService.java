@@ -37,8 +37,8 @@ public class AdministratorService extends EmployeeService<AdministratorDTORespon
     }
 
     @Override
-    protected AdministratorNotFoundException createNotFoundException(String message) {
-        return new AdministratorNotFoundException(message);
+    protected AdministratorNotFoundException notFoundException() {
+        return new AdministratorNotFoundException("No se encontro un administrador con el id especificado");
     }
 
     @Override

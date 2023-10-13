@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * Entity Person
+ * Entity for person
  */
 @Getter
 @Setter
@@ -25,25 +25,25 @@ import java.util.Set;
 public class Person {
 
     /**
-     * id
+     * Id
       */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * not nullables
+     * Not nullables
      */
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "dni", nullable = false, unique = true)
+    private String dni;
 
     /**
-     * nullables
+     * Nullables
      */
-    @Column(name = "dni")
-    private String dni;
     @Column(name = "birthday")
     private Date birthday;
     @Column(name = "nationality")
@@ -54,13 +54,13 @@ public class Person {
     private String sex;
     @Column(name = "social_work")
     private String socialWork;
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
     @Column(name = "phone_number")
     private String phoneNumber;
 
     /**
-     * relations
+     * Relations
      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -72,7 +72,7 @@ public class Person {
     private Set<Person> persons;
 
     /**
-     * additional
+     * Additional
      */
     @CreationTimestamp
     @Column(name = "created_at")

@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Entity Administrator
+ * Entity for administrator
  */
 @Getter
 @Setter

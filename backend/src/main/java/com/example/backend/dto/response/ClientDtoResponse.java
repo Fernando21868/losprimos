@@ -1,21 +1,22 @@
 package com.example.backend.dto.response;
 
-import com.example.backend.model.Role;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+import java.io.Serializable;
 
+/**
+ * Response dto for client
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class ClientDtoResponse extends UserDtoResponse {
+public class ClientDtoResponse extends UserDtoResponse implements Serializable {
 
+    /**
+     * Id
+     */
     private Long id;
-    private String comment;
-    private String cart;
-    private String favoriteItem;
-    private Double amountSpent;
 
 }

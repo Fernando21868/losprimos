@@ -37,8 +37,8 @@ public class SocialWorkerService extends EmployeeService<SocialWorkerDTOResponse
     }
 
     @Override
-    protected SocialWorkerNotFoundException createNotFoundException(String message) {
-        return new SocialWorkerNotFoundException(message);
+    protected SocialWorkerNotFoundException notFoundException() {
+        return new SocialWorkerNotFoundException("No se encontro un trabajador social con el id especificado");
     }
 
     @Override

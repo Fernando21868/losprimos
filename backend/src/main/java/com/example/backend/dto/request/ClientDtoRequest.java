@@ -1,17 +1,22 @@
 package com.example.backend.dto.request;
 
-import com.example.backend.model.Role;
-import com.example.backend.model.RoleEnum;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.*;
-import java.util.Date;
-import java.util.List;
+import java.io.Serializable;
 
+/**
+ * Request dto for client
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class ClientDtoRequest extends PersonDTORequest {
+public class ClientDtoRequest extends PersonDTORequest implements Serializable {
+
+    /**
+     * Id
+     */
+    private Long id;
+
 }

@@ -1,13 +1,15 @@
 import { SideBar } from "../sideBar/SideBar";
 import { Outlet } from "react-router-dom";
-import Footer from "../footer/Footer";
+
 
 export const LayoutAdmin = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-row">
       <SideBar></SideBar>
-      <Outlet></Outlet>
-      <Footer></Footer>
+      <div className="w-screen h-screen ml-[15%] sm:ml-[5%]">
+        <Outlet></Outlet>
+      </div>
+      {/* <Footer></Footer> */}
     </div>
   );
 };

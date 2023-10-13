@@ -25,6 +25,14 @@ import { Checkbox } from "../../@components/ui/checkbox";
 import { toast } from "../../@components/ui/use-toast";
 import { ToastAction } from "../../@components/ui/toast";
 import { Toaster } from "../../@components/ui/toaster";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../@components/ui/card";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,7 +66,7 @@ function Login() {
         ),
       });
     } else {
-      navigate("/admin");
+      navigate("admin");
     }
   }
 
@@ -68,79 +76,89 @@ function Login() {
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/admin");
+      navigate("admin");
     }
   }, [userInfo]);
 
   return (
     <div className="p-4 flex flex-col items-center justify-center h-screen w-screen">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="max-w-md w-full"
-        >
-          <Toaster></Toaster>
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Usuario</FormLabel>
-                <FormControl>
-                  <Input placeholder="Por ejemplo: Usuario" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contraseña</FormLabel>
-                <FormControl>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Por ejemplo: Lucas123"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  La contraseña debe cotener por lo menos 4 caracteres, 1
-                  mayuscula, 1 minuscula, y 1 numero
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="mt-2 mb-4 flex items-center space-x-2">
-            <Checkbox onClick={handleShowPassword} id="showPassword" />
-            <label
-              htmlFor="showPassword"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      <Card>
+        <CardHeader>
+          <CardTitle>Iniciar Sesion</CardTitle>
+          <CardDescription>Formulario de inicio de sesion.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="max-w-md w-full"
             >
-              Mostrar/ocultar contraseña
-            </label>
-          </div>
-          {loading ? (
-            <Button className="mt-4" disabled>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Por favor espere
-            </Button>
-          ) : (
-            <Button className="mt-4" type="submit">
-              Iniciar sesion
-            </Button>
-          )}
+              <Toaster></Toaster>
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Usuario</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Por ejemplo: Usuario" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contraseña</FormLabel>
+                    <FormControl>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Por ejemplo: Lucas123"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      La contraseña debe cotener por lo menos 4 caracteres, 1
+                      mayuscula, 1 minuscula, y 1 numero
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="mt-2 mb-4 flex items-center space-x-2">
+                <Checkbox onClick={handleShowPassword} id="showPassword" />
+                <label
+                  htmlFor="showPassword"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Mostrar/ocultar contraseña
+                </label>
+              </div>
+              {loading ? (
+                <Button className="mt-4" disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Por favor espere
+                </Button>
+              ) : (
+                <Button className="mt-4" type="submit">
+                  Iniciar sesion
+                </Button>
+              )}
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter>
           <div>
-            ¿No tesnes una cuenta todavia?
+            ¿Olvidaste la contraseña?
             <Button className="-ml-2" variant="link">
-              <Link to={"/register"}>Registrate</Link>
+              <Link to={"/register"}>Solicitar recuperar cuenta</Link>
             </Button>
           </div>
-        </form>
-      </Form>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

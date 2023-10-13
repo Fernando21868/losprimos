@@ -38,8 +38,8 @@ public class DoctorService extends EmployeeService<DoctorDTOResponse, DoctorDTOR
     }
 
     @Override
-    protected DoctorNotFoundException createNotFoundException(String message) {
-        return new DoctorNotFoundException(message);
+    protected DoctorNotFoundException notFoundException() {
+        return new DoctorNotFoundException("No se encontro un doctor con el id especificado");
     }
 
     @Override

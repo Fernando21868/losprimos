@@ -28,8 +28,8 @@ public class PatientService extends PersonService<PatientDTOResponse, PatientDTO
     }
 
     @Override
-    protected PatientNotFoundException createNotFoundException(String message) {
-        return new PatientNotFoundException(message);
+    protected PatientNotFoundException notFoundException() {
+        return new PatientNotFoundException("No se encontro un paciente con el id especificado");
     }
 
     @Override

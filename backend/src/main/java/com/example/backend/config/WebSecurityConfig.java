@@ -30,8 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/**/verifyRegisteredAccount")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/administrators/**")
-                .permitAll()
+                //.antMatchers(HttpMethod.DELETE, "/api/v1/administrators/**")
+                //.permitAll()
+                //.antMatchers(HttpMethod.POST, "/api/v1/administrators/register")
+                //.permitAll()
+                //.antMatchers(HttpMethod.PATCH, "/api/v1/administrators/**")
+                //.permitAll()
+                //.antMatchers(HttpMethod.GET, "/api/v1/administrators/**")
+                //.permitAll()
                 .antMatchers(
                         "/api/v1/employees/**",
                         "/api/v1/administrators/**",
@@ -40,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/nurses/**",
                         "/api/v1/nutritionists/**",
                         "/api/v1/psychologists/**"
-                ).hasAnyAuthority("ADMIN")//
+                ).hasAnyAuthority("ADMIN")
                 .antMatchers(
                         "/api/v1/patients/**"
                 ).hasAnyAuthority("EMPLOYEE", "ADMIN")

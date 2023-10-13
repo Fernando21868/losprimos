@@ -1,20 +1,25 @@
 package com.example.backend.dto.request;
 
-import com.example.backend.model.ClinicHistory;
-import com.example.backend.model.Person;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.Set;
+import java.io.Serializable;
 
+/**
+ * Request dto for patient
+ */
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public class PatientDTORequest extends PersonDTORequest{
+public class PatientDTORequest extends PersonDTORequest implements Serializable {
+
+    /**
+     * Id
+     */
+    private Long id;
 
     // nullables
     @Size(max = 15, message = "La cedula de identidad no contener mas de 15 caracteres")

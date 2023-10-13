@@ -5,6 +5,9 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
+/**
+ * Entity for clinic history
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

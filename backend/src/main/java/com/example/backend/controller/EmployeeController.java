@@ -53,13 +53,13 @@ public abstract class EmployeeController<
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody RequestDTO employeeDtoRequest) {
-        return new ResponseEntity<>(service.update(id, employeeDtoRequest), HttpStatus.OK);
+    public ResponseEntity<?> update(@Valid @RequestBody RequestDTO employeeDtoRequest) {
+        return new ResponseEntity<>(service.update(employeeDtoRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
-        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.delete(id), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/register")
@@ -74,6 +74,11 @@ public abstract class EmployeeController<
         return siteURL.replace(request.getServletPath(), "");
     }
 
+    /**
+     * Controller to verify an account
+     * @param code to verify an account
+     * @return if the account was verified or not
+     */
     @GetMapping("/verifyRegisteredAccount")
     public ResponseEntity<?> verifyRegisteredAccount(@RequestParam(name = "code") String code){
         ResponseSuccessDto<ResponseDTO> responseSuccessDto = service.verifyRegisteredAccount(code);

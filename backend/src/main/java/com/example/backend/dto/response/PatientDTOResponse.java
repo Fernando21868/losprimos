@@ -1,28 +1,36 @@
 package com.example.backend.dto.response;
 
-import com.example.backend.dto.request.ClinicHistoryDTORequest;
-import com.example.backend.dto.request.PersonDTORequest;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
-import java.util.Set;
+import java.io.Serializable;
 
+/**
+ * Response dto for patient
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class PatientDTOResponse extends PersonDTOResponse{
+public class PatientDTOResponse extends PersonDTOResponse implements Serializable {
 
-    // nullables
+    /**
+     * Id
+     */
+    private Long id;
+
+    /**
+     * Nullables
+     */
     private Integer identityCard;
     private Integer bookEnlistment;
     private Integer bookCivic;
 
-    // relations
+    /**
+     * Relations
+     */
     private ClinicHistoryDTOResponse clinicHistory;
 
 }

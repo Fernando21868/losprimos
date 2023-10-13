@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 /**
- * Entity Employee
+ * Entity for employee
  */
 @Getter
 @Setter
@@ -19,10 +19,18 @@ import javax.persistence.*;
 public class Employee extends User{
 
     /**
-     * id
+     * Id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * Not nullables
+     */
+    @Column(name = "enrollment", nullable = false)
+    String enrollment;
+    @Column(name = "type", nullable = false)
+    String type;
 
 }

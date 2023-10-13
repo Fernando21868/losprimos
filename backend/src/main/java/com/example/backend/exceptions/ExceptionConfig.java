@@ -14,27 +14,54 @@ import java.util.Map;
 @ControllerAdvice
 public class ExceptionConfig {
 
+    /**
+     * Function to handle internal errors
+     * @param exception the exception that occur
+     * @return response to verify the error
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({InternalException.class})
+    public ResponseEntity<?> internalException(RuntimeException exception){
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage(), true);
+        return new ResponseEntity<>(responseErrorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * Function to handle not found errors
+     * @param exception the exception that occur
+     * @return response to verify the error
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({PatientNotFoundException.class, EmployeeNotFoundException.class})
     public ResponseEntity<?> notFoundException(RuntimeException exception){
-        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, 404, exception.getMessage(), true);
-        return new ResponseEntity<>(responseErrorDto, HttpStatus.NOT_FOUND);
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, HttpStatus.BAD_REQUEST.value(), exception.getMessage(), true);
+        return new ResponseEntity<>(responseErrorDto, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Function to handle already exist errors
+     * @param exception the exception that occur
+     * @return response to verify the error
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({UsernameAlreadExistException.class, EmailAlreadExistException.class})
-    public ResponseEntity<?> usernameEmailFoundException(RuntimeException exception){
-        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, 404, exception.getMessage(), true);
-        return new ResponseEntity<>(responseErrorDto, HttpStatus.NOT_FOUND);
+    @ExceptionHandler({UsernameAlreadyExistException.class, EmailAlreadExistException.class, DniAlreadyExistException.class})
+    public ResponseEntity<?> alreadyFoundException(RuntimeException exception){
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto(null, HttpStatus.BAD_REQUEST.value(), exception.getMessage(), true);
+        return new ResponseEntity<>(responseErrorDto, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Function to handle validations request errors
+     * @param exception the exception that occur
+     * @return response to verify the error
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseErrorDto handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException exception) {
 
         Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
                     if (errors.containsKey(error.getField())) {
                         errors.put(error.getField(), String.format("%s, %s", errors.get(error.getField()), error.getDefaultMessage()));
                     } else {
@@ -42,7 +69,8 @@ public class ExceptionConfig {
                     }
                 }
         );
-        return new ResponseErrorDto(errors, 404, "VALIDATION_FAILED", true);
+        ResponseErrorDto responseErrorDto = new ResponseErrorDto(errors, HttpStatus.BAD_REQUEST.value(), "VALIDATION_FAILED", true);
+        return new ResponseEntity<>(responseErrorDto, HttpStatus.BAD_REQUEST);
     }
 
 }

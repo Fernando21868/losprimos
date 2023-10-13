@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity for user
+ */
 @Getter
 @Setter
 @SuperBuilder
@@ -17,7 +20,7 @@ import java.util.List;
 public class User extends Person{
 
     /**
-     * id
+     * Id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +28,15 @@ public class User extends Person{
     private Long id;
 
     /**
-     * nullables
+     * Nullables
      */
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
 
     /**
-     * not nullables
+     * Not nullables
      */
     @Column(name = "verification_code")
     private String verificationCode;
@@ -41,7 +44,7 @@ public class User extends Person{
     private Boolean enabled;
 
     /**
-     * relations
+     * Relations
      */
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles = new ArrayList<>();

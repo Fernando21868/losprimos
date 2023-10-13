@@ -143,7 +143,7 @@ public class SessionServiceImpl implements ISessionService {
         if(user.isPresent()){
             return modelMapperConfig.modelMapper().map(user.get(), UserDtoResponse.class);
         }
-        throw new EmployeeNotFoundException("No se encontro el usuario con el id especificado");
+        throw new UserNotFoundException("No se encontro el usuario con el username especificado");
     }
 
     /***

@@ -10,7 +10,18 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository<Model extends User> extends IPersonRepository<Model> {
 
+    /**
+     * Query to find a user by username
+     * @param username to find a user
+     * @return user
+     */
     Optional<Model> findByUsernameAndUsernameIsNotNull(String username);
-    Optional<Model> findByVerificationCode(String verificationCode);
+
+    /**
+     * Query to find a user by token
+     * @param verificationCode to find a user
+     * @return user
+     */
+    Optional<Model> findByVerificationCodeAndVerificationCodeIsNotNull(String verificationCode);
 
 }

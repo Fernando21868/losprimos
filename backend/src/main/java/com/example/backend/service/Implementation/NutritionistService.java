@@ -37,8 +37,8 @@ public class NutritionistService extends EmployeeService<NutritionistDTOResponse
     }
 
     @Override
-    protected NutritionistNotFoundException createNotFoundException(String message) {
-        return new NutritionistNotFoundException(message);
+    protected NutritionistNotFoundException notFoundException() {
+        return new NutritionistNotFoundException("No se encontro un nutricionista con el id especificado");
     }
 
     @Override
